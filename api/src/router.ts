@@ -10,9 +10,10 @@ router.get('/users', async (ctx) => {
 })
 
 router.post('/users', async (ctx) => {
-  const { username, name, email, password } = ctx.request.body as User
+  const { id, username, name, email, password } = ctx.request.body as User
 
   const user = {
+    id,
     username,
     name,
     email,
