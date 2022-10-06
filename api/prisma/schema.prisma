@@ -6,3 +6,56 @@ datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
 }
+
+model User {
+  id       String @id @default(uuid())
+  name     String @db.VarChar(255)
+  username String @unique @db.VarChar(50)
+  email    String @unique @db.VarChar(255)
+  password String @db.VarChar(255)
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  Guess Guess[]
+
+  @@map("users")
+}
+
+model Guess {
+  id       String @id @default(uuid())
+  user_id  String @db.VarChar(255)
+  match_id String @db.VarChar(255)
+
+  home_team_score Int
+  away_team_score Int
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  match Match @relation(fields: [match_id], references: [id])
+  user  User  @relation(fields: [user_id], references: [id])
+
+  @@map("guesses")
+}
+
+model Match {
+  id         String   @id @default(uuid())
+  group      String?  @db.VarChar(1)
+  round      String   @db.VarChar(100)
+  match_time DateTime
+
+  home_team_name String @db.VarChar(100)
+  home_team_slug String @db.VarChar(3)
+
+  away_team_name String @db.VarChar(100)
+  away_team_slug String @db.VarChar(3)
+
+  created_at DateTime @default(now()) @map("created_at")
+  updated_at DateTime @updatedAt @map("updated_at")
+
+  Guess Guess[]
+
+  @@unique([home_team_slug, away_team_slug, match_time])
+  @@map("matches")
+}
