@@ -6,6 +6,10 @@ import { prisma } from '../../database/prismaClient'
 export const create = async (ctx: RouterContext) => {
   const { name, username, email, password } = ctx.request.body as NewUser
 
+  if (!validateCreateUserRequest(ctx)) {
+    return
+  }
+
   const hashPassword = await hash(password, 10)
 
   try {
@@ -53,4 +57,20 @@ export const list = async (ctx: RouterContext) => {
     ctx.status = 500
     ctx.body = { message: (error as Error).message }
   }
+}
+
+export const validateCreateUserRequest = (ctx: RouterContext) => {
+  const { name, username, email, password } = ctx.request.body as NewUser
+
+  if (!name || !username || !email || !password) {
+    ctx.status = 400
+
+    ctx.body = {
+      message: 'Dados inválidos.',
+    }
+
+    return false
+  }
+
+  return true
 }

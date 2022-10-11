@@ -6,7 +6,7 @@ export const create = async (ctx: RouterContext) => {
   const { matchId, userId, homeTeamScore, awayTeamScore } = ctx.request
     .body as NewGuess
 
-  if (!validateCreateGuessPayload(ctx)) {
+  if (!validateCreateGuessRequest(ctx)) {
     return
   }
 
@@ -43,7 +43,7 @@ export const create = async (ctx: RouterContext) => {
   }
 }
 
-const validateCreateGuessPayload = (ctx: RouterContext) => {
+const validateCreateGuessRequest = (ctx: RouterContext) => {
   const { matchId, userId, homeTeamScore, awayTeamScore } = ctx.request
     .body as NewGuess
 

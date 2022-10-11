@@ -17,7 +17,7 @@ const matches = [
     home_team_slug: 'SEN',
     home_team_name: 'Senegal',
     away_team_slug: 'HOL',
-    away_team_name: 'holanda',
+    away_team_name: 'Holanda',
     group: 'A',
     round: 'Rodada 1',
   },
@@ -33,7 +33,7 @@ const matches = [
   {
     match_time: '2022-11-25T16:00:00Z',
     home_team_slug: 'HOL',
-    home_team_name: 'holanda',
+    home_team_name: 'Holanda',
     away_team_slug: 'EQU',
     away_team_name: 'Equador',
     group: 'A',
@@ -42,7 +42,7 @@ const matches = [
   {
     match_time: '2022-11-29T15:00:00Z',
     home_team_slug: 'HOL',
-    home_team_name: 'holanda',
+    home_team_name: 'Holanda',
     away_team_slug: 'CAT',
     away_team_name: 'Catar',
     group: 'A',
