@@ -36,6 +36,7 @@ model Guess {
   match Match @relation(fields: [match_id], references: [id])
   user  User  @relation(fields: [user_id], references: [id])
 
+  @@unique([user_id, match_id])
   @@map("guesses")
 }
 

@@ -35,12 +35,11 @@ export const create = async (ctx: RouterContext) => {
       },
     })
 
-    ctx.body = user
     ctx.status = 201
+    ctx.body = user
   } catch (error) {
-    console.log('🚀 ~ error', error)
-    ctx.body = error
     ctx.status = 500
+    ctx.body = { message: (error as Error).message }
   }
 }
 
@@ -48,11 +47,10 @@ export const list = async (ctx: RouterContext) => {
   try {
     const users = await prisma.user.findMany()
 
-    ctx.body = users
     ctx.status = 200
+    ctx.body = users
   } catch (error) {
-    console.log('🚀 ~ error', error)
-    ctx.body = error
     ctx.status = 500
+    ctx.body = { message: (error as Error).message }
   }
 }
