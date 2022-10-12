@@ -4,13 +4,16 @@ import { NewUser } from '../../@types/users'
 import { prisma } from '../../database/prismaClient'
 
 export const create = async (ctx: RouterContext) => {
-  const { name, username, email, password } = ctx.request.body as NewUser
+  const {
+    name,
+    username,
+    email,
+    password: passwordRequest,
+  } = ctx.request.body as NewUser
 
   if (!validateCreateUserRequest(ctx)) {
     return
   }
-
-  const hashPassword = await hash(password, 10)
 
   try {
     const userExists = await prisma.user.findFirst({
@@ -30,12 +33,12 @@ export const create = async (ctx: RouterContext) => {
       return
     }
 
-    const user = await prisma.user.create({
+    const { password, ...user } = await prisma.user.create({
       data: {
         name,
         username,
         email,
-        password: hashPassword,
+        password: await hash(passwordRequest, 10),
       },
     })
 
@@ -49,7 +52,14 @@ export const create = async (ctx: RouterContext) => {
 
 export const list = async (ctx: RouterContext) => {
   try {
-    const users = await prisma.user.findMany()
+    const users = await prisma.user.findMany({
+      select: {
+        id: true,
+        name: true,
+        username: true,
+        email: true,
+      },
+    })
 
     ctx.status = 200
     ctx.body = users
