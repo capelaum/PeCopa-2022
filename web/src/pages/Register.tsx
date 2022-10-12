@@ -1,4 +1,5 @@
 import { Input } from '@/components/Input'
+import { api } from '@/services/api'
 import { useFormik } from 'formik'
 import { MdArrowBack } from 'react-icons/md'
 import { NavLink } from 'react-router-dom'
@@ -19,8 +20,13 @@ const validationSchema = yup.object().shape({
 
 export function Register() {
   const formik = useFormik({
-    onSubmit: (values) => {
-      console.log(values)
+    onSubmit: async (values) => {
+      try {
+        const response = await api.post('/users', values)
+        console.log('🚀 ~ response', response)
+      } catch (error) {
+        console.log('🚀 ~ error', error)
+      }
     },
     initialValues: {
       name: '',

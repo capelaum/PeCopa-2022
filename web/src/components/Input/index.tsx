@@ -22,7 +22,6 @@ export function Input({
   onBlur,
   ...rest
 }: InputProps) {
-  console.log('🚀 ~ error', error)
   return (
     <div className="flex flex-col">
       <label className="label" htmlFor={name}>
