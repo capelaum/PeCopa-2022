@@ -6,4 +6,4 @@ export type Guess = {
   awayTeamScore: number
 }
 
-export type NewGuess = Omit<Guess, 'id'>
+export type NewGuess = Omit<Guess, 'id' | 'userId'>
