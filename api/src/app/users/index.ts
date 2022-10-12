@@ -29,7 +29,7 @@ export const create = async (ctx: RouterContext) => {
     if (userExists) {
       ctx.status = 400
       ctx.body = {
-        message: 'Email ou username já cadastrado.',
+        message: 'Email ou nome de usuário já cadastrado.',
       }
       return
     }
@@ -44,7 +44,10 @@ export const create = async (ctx: RouterContext) => {
     })
 
     ctx.status = 201
-    ctx.body = user
+    ctx.body = {
+      user,
+      message: 'Conta criada com sucesso!',
+    }
   } catch (error) {
     ctx.status = 500
     ctx.body = { message: (error as Error).message }
@@ -145,6 +148,7 @@ export const login = async (ctx: RouterContext) => {
     ctx.body = {
       user: userWithoutPassword,
       token,
+      message: 'Login realizado com sucesso.',
     }
   } catch (error) {
     ctx.status = 500

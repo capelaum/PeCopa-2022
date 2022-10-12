@@ -1,8 +1,11 @@
+import { RegisterFormValues } from '@/@types/form'
 import { Input } from '@/components/Input'
 import { api } from '@/services/api'
 import { useFormik } from 'formik'
 import { MdArrowBack } from 'react-icons/md'
+import { ThreeDots } from 'react-loader-spinner'
 import { NavLink } from 'react-router-dom'
+import { toast } from 'react-toastify'
 import * as yup from 'yup'
 
 const validationSchema = yup.object().shape({
@@ -20,14 +23,7 @@ const validationSchema = yup.object().shape({
 
 export function Register() {
   const formik = useFormik({
-    onSubmit: async (values) => {
-      try {
-        const response = await api.post('/users', values)
-        console.log('🚀 ~ response', response)
-      } catch (error) {
-        console.log('🚀 ~ error', error)
-      }
-    },
+    onSubmit: (values) => handleSubmit(values),
     initialValues: {
       name: '',
       username: '',
@@ -36,6 +32,17 @@ export function Register() {
     },
     validationSchema,
   })
+
+  const handleSubmit = async (values: RegisterFormValues) => {
+    try {
+      const response = await api.post('/users', values)
+      console.log('🚀 ~ response', response)
+
+      toast.success(response.data.message)
+    } catch (error) {
+      toast.error((error as any).response.data.message)
+    }
+  }
 
   return (
     <div className="min-h-screen bg-white text-white flex flex-col items-center">
@@ -115,10 +122,22 @@ export function Register() {
 
           <button
             type="submit"
-            className="button button-primary mt-5 disabled:opacity-80 disabled:cursor-not-allowed"
-            disabled={!formik.isValid}
+            className="button button-primary mt-5"
+            disabled={!formik.isValid || formik.isSubmitting}
           >
-            Criar minha conta
+            {formik.isSubmitting ? (
+              <ThreeDots
+                height="30"
+                width="30"
+                radius="9"
+                color="#F4F6FF"
+                ariaLabel="three-dots-loading"
+                wrapperStyle={{}}
+                visible={true}
+              />
+            ) : (
+              'Criar minha conta'
+            )}
           </button>
         </form>
       </main>
