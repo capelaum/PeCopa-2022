@@ -34,7 +34,7 @@ model Guess {
   updated_at DateTime @updatedAt
 
   match Match @relation(fields: [match_id], references: [id])
-  user  User  @relation(fields: [user_id], references: [id])
+  user  User  @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@unique([user_id, match_id])
   @@map("guesses")
