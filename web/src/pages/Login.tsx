@@ -1,52 +1,20 @@
-import { LoginFormValues } from '@/@types/form'
 import { Input } from '@/components/Input'
-import { api } from '@/services/api'
-import { Buffer } from 'buffer'
+import { login } from '@/libs/authLib'
+import { loginValidationSchema } from '@/validations/formValidations'
 import { useFormik } from 'formik'
 import { MdArrowBack } from 'react-icons/md'
 import { ThreeDots } from 'react-loader-spinner'
 import { NavLink } from 'react-router-dom'
-import { toast } from 'react-toastify'
-import * as yup from 'yup'
-
-const validationSchema = yup.object().shape({
-  email: yup
-    .string()
-    .email('E-mail deve ser válido.')
-    .required('Informe seu e-mail.'),
-  password: yup
-    .string()
-    .min(8, 'Senha deve ter pelo menos 8 caracteres')
-    .required('Digite sua senha.'),
-})
 
 export function Login() {
   const formik = useFormik({
-    onSubmit: (values) => handleSubmit(values),
+    onSubmit: (values) => login(values),
     initialValues: {
       email: '',
       password: '',
     },
-    validationSchema,
+    validationSchema: loginValidationSchema,
   })
-
-  const handleSubmit = async (values: LoginFormValues) => {
-    try {
-      const encodedAuth = Buffer.from(
-        `${values.email}:${values.password}`
-      ).toString('base64')
-
-      const response = await api.get('/login', {
-        headers: {
-          Authorization: `Basic ${encodedAuth}`,
-        },
-      })
-
-      toast.success(response.data.message)
-    } catch (error) {
-      toast.error((error as any).response.data.message)
-    }
-  }
 
   return (
     <div className="min-h-screen bg-white text-white flex flex-col items-center overflow-hidden">

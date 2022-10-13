@@ -1,48 +1,22 @@
-import { RegisterFormValues } from '@/@types/form'
 import { Input } from '@/components/Input'
-import { api } from '@/services/api'
+import { register } from '@/libs/authLib'
+import { registerValidationSchema } from '@/validations/formValidations'
 import { useFormik } from 'formik'
 import { MdArrowBack } from 'react-icons/md'
 import { ThreeDots } from 'react-loader-spinner'
 import { NavLink } from 'react-router-dom'
-import { toast } from 'react-toastify'
-import * as yup from 'yup'
-
-const validationSchema = yup.object().shape({
-  name: yup.string().trim().required('Preencha seu nome.'),
-  username: yup.string().required('Preencha seu nome de usuário.'),
-  email: yup
-    .string()
-    .email('E-mail deve ser válido.')
-    .required('Informe seu e-mail.'),
-  password: yup
-    .string()
-    .min(8, 'Senha deve ter pelo menos 8 caracteres')
-    .required('Digite sua senha.'),
-})
 
 export function Register() {
   const formik = useFormik({
-    onSubmit: (values) => handleSubmit(values),
+    onSubmit: (values) => register(values),
     initialValues: {
       name: '',
       username: '',
       email: '',
       password: '',
     },
-    validationSchema,
+    validationSchema: registerValidationSchema,
   })
-
-  const handleSubmit = async (values: RegisterFormValues) => {
-    try {
-      const response = await api.post('/users', values)
-      console.log('🚀 ~ response', response)
-
-      toast.success(response.data.message)
-    } catch (error) {
-      toast.error((error as any).response.data.message)
-    }
-  }
 
   return (
     <div className="min-h-screen bg-white text-white flex flex-col items-center">
