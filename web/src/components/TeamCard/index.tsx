@@ -1,4 +1,4 @@
-import { Team } from '@/@types/team'
+import { Team } from '@/@types/match'
 
 interface TeamCardProps {
   team: Team

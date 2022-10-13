@@ -9,3 +9,7 @@ export type AuthData = {
   user: User
   token: string
 }
+
+export type MatchesData = {
+  data: Match[]
+}

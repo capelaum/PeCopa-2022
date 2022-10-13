@@ -1,43 +1,24 @@
-import { BetCard } from '@/components/BetCard'
-import { DatePicker } from '@/components/DatePicker'
+import { MatchesData } from '@/@types/response'
+import { BetsContainer } from '@/components/BetsContainer'
 import { Footer } from '@/components/Footer'
 import { Header } from '@/components/Header'
+import { api } from '@/services/api'
 import { addDays, subDays } from 'date-fns'
 import { useState } from 'react'
 import { MdArrowBack } from 'react-icons/md'
 import { NavLink } from 'react-router-dom'
-
-const matches = [
-  {
-    id: 1,
-    matchTime: '13:00',
-    teamA: {
-      name: 'Brazil',
-      slug: 'BRA',
-    },
-    teamB: {
-      name: 'Argentina',
-      slug: 'ARG',
-    },
-  },
-  {
-    id: 2,
-    matchTime: '13:00',
-    teamA: {
-      name: 'Catar',
-      slug: 'CAT',
-    },
-    teamB: {
-      name: 'Equador',
-      slug: 'EQU',
-    },
-  },
-]
+import { useAsync } from 'react-use'
 
 export function Bets() {
-  const [selectedDate, setSelectedDate] = useState(
-    new Date('2022-11-20T00:00:00.000Z')
-  )
+  const [selectedDate, setSelectedDate] = useState(new Date(2022, 10, 20))
+
+  const matches = useAsync(async () => {
+    const { data }: MatchesData = await api.get(
+      `/matches?matchTime=${new Date(selectedDate).toISOString()}`
+    )
+
+    return data
+  }, [selectedDate])
 
   function prevDay() {
     const prevDate = subDays(selectedDate, 1)
@@ -69,17 +50,13 @@ export function Bets() {
         <h2 className="w-full text-red-500 font-bold text-2xl">
           Seus palpites
         </h2>
-        <DatePicker
+
+        <BetsContainer
+          matches={matches}
+          selectedDate={selectedDate}
           prevDay={prevDay}
           nextDay={nextDay}
-          selectedDate={selectedDate}
         />
-
-        <div className="w-full flex flex-col items-center gap-5">
-          {matches.map((match) => (
-            <BetCard key={match.id} match={match} />
-          ))}
-        </div>
       </main>
 
       <Footer />

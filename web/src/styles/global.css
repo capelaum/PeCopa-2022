@@ -53,6 +53,13 @@ body {
   bg-white hover:bg-red-100;
 }
 
+.date-picker-button {
+  @apply flex items-center justify-center
+    transition-all duration-300
+  bg-white rounded-xl hover:bg-red-100
+  disabled:bg-gray-200 disabled:cursor-not-allowed;
+}
+
 input[type='number']::-webkit-inner-spin-button,
 input[type='number']::-webkit-outer-spin-button {
   -webkit-appearance: none;

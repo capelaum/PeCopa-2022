@@ -19,8 +19,29 @@ export const list = async (ctx: RouterContext) => {
       })
     }
 
+    const formatedMatches = matches.map((match) => {
+      return {
+        id: match.id,
+        group: match.group,
+        round: match.round,
+        matchTime: match.match_time,
+        homeTeam: {
+          slug: match.home_team_slug,
+          name: match.home_team_name,
+        },
+        awayTeam: {
+          slug: match.away_team_slug,
+          name: match.away_team_name,
+        },
+      }
+    })
+
+    formatedMatches.sort((a, b) => {
+      return new Date(a.matchTime).getTime() - new Date(b.matchTime).getTime()
+    })
+
     ctx.status = 200
-    ctx.body = matches
+    ctx.body = formatedMatches
   } catch (error) {
     ctx.status = 500
     ctx.body = { message: (error as Error).message }

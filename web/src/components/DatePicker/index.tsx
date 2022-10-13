@@ -17,11 +17,10 @@ export function DatePicker({
     <div className="flex justify-between items-center gap-4">
       <button
         onClick={prevDay}
-        className="
-              flex items-center justify-center
-              transition-all duration-300
-            bg-white rounded-xl hover:bg-red-100
-            "
+        disabled={
+          selectedDate < new Date() || selectedDate <= new Date(2022, 10, 20)
+        }
+        className="date-picker-button"
       >
         <MdChevronLeft size={40} color="#AF053F" />
       </button>
@@ -34,11 +33,10 @@ export function DatePicker({
 
       <button
         onClick={nextDay}
-        className="
-              flex items-center justify-center
-              transition-all duration-300
-            bg-white rounded-xl hover:bg-red-100
-            "
+        disabled={
+          selectedDate < new Date() || selectedDate >= new Date(2022, 11, 2)
+        }
+        className="date-picker-button"
       >
         <MdChevronRight size={40} color="#AF053F" />
       </button>

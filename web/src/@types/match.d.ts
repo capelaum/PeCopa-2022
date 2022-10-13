@@ -4,8 +4,11 @@ export type Team = {
 }
 
 export type Match = {
-  id: string | number
+  id: string
+  group: string
+  round: string
+  homeTeam: Team
+  awayTeam: Team
+
   matchTime: string
-  teamA: Team
-  teamB: Team
 }
