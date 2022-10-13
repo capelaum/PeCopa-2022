@@ -2,7 +2,7 @@ import { PrismaClient } from '@prisma/client'
 
 const prisma = new PrismaClient()
 
-const matches = [
+const groupPhaseMatches = [
   {
     match_time: '2022-11-20T16:00:00Z',
     home_team_slug: 'CAT',
@@ -444,10 +444,148 @@ const matches = [
   },
 ]
 
-async function main() {
+const knockoutPhaseMatches = [
+  {
+    match_time: '2022-12-03T15:00:00Z',
+    home_team_slug: '?',
+    home_team_name: 'A confirmar',
+    away_team_slug: '?',
+    away_team_name: 'A confirmar',
+    round: 'Oitavas de final',
+  },
+  {
+    match_time: '2022-12-03T19:00:00Z',
+    home_team_slug: '?',
+    home_team_name: 'A confirmar',
+    away_team_slug: '?',
+    away_team_name: 'A confirmar',
+    round: 'Oitavas de final',
+  },
+  {
+    match_time: '2022-12-04T15:00:00Z',
+    home_team_slug: '?',
+    home_team_name: 'A confirmar',
+    away_team_slug: '?',
+    away_team_name: 'A confirmar',
+    round: 'Oitavas de final',
+  },
+  {
+    match_time: '2022-12-04T19:00:00Z',
+    home_team_slug: '?',
+    home_team_name: 'A confirmar',
+    away_team_slug: '?',
+    away_team_name: 'A confirmar',
+    round: 'Oitavas de final',
+  },
+  {
+    match_time: '2022-12-05T15:00:00Z',
+    home_team_slug: '?',
+    home_team_name: 'A confirmar',
+    away_team_slug: '?',
+    away_team_name: 'A confirmar',
+    round: 'Oitavas de final',
+  },
+  {
+    match_time: '2022-12-05T19:00:00Z',
+    home_team_slug: '?',
+    home_team_name: 'A confirmar',
+    away_team_slug: '?',
+    away_team_name: 'A confirmar',
+    round: 'Oitavas de final',
+  },
+  {
+    match_time: '2022-12-06T15:00:00Z',
+    home_team_slug: '?',
+    home_team_name: 'A confirmar',
+    away_team_slug: '?',
+    away_team_name: 'A confirmar',
+    round: 'Oitavas de final',
+  },
+  {
+    match_time: '2022-12-06T19:00:00Z',
+    home_team_slug: '?',
+    home_team_name: 'A confirmar',
+    away_team_slug: '?',
+    away_team_name: 'A confirmar',
+    round: 'Oitavas de final',
+  },
+  {
+    match_time: '2022-12-09T15:00:00Z',
+    home_team_slug: '?',
+    home_team_name: 'A confirmar',
+    away_team_slug: '?',
+    away_team_name: 'A confirmar',
+    round: 'Quartas de final',
+  },
+  {
+    match_time: '2022-12-09T19:00:00Z',
+    home_team_slug: '?',
+    home_team_name: 'A confirmar',
+    away_team_slug: '?',
+    away_team_name: 'A confirmar',
+    round: 'Quartas de final',
+  },
+  {
+    match_time: '2022-12-10T15:00:00Z',
+    home_team_slug: '?',
+    home_team_name: 'A confirmar',
+    away_team_slug: '?',
+    away_team_name: 'A confirmar',
+    round: 'Quartas de final',
+  },
+  {
+    match_time: '2022-12-10T19:00:00Z',
+    home_team_slug: '?',
+    home_team_name: 'A confirmar',
+    away_team_slug: '?',
+    away_team_name: 'A confirmar',
+    round: 'Quartas de final',
+  },
+  {
+    match_time: '2022-12-13T19:00:00Z',
+    home_team_slug: '?',
+    home_team_name: 'A confirmar',
+    away_team_slug: '?',
+    away_team_name: 'A confirmar',
+    round: 'Semifinal',
+  },
+  {
+    match_time: '2022-12-14T19:00:00Z',
+    home_team_slug: '?',
+    home_team_name: 'A confirmar',
+    away_team_slug: '?',
+    away_team_name: 'A confirmar',
+    round: 'Semifinal',
+  },
+  {
+    match_time: '2022-12-17T15:00:00Z',
+    home_team_slug: '?',
+    home_team_name: 'A confirmar',
+    away_team_slug: '?',
+    away_team_name: 'A confirmar',
+    round: 'Disputa pelo 3º lugar',
+  },
+  {
+    match_time: '2022-12-18T15:00:00Z',
+    home_team_slug: '?',
+    home_team_name: 'A confirmar',
+    away_team_slug: '?',
+    away_team_name: 'A confirmar',
+    round: 'Final',
+  },
+]
+
+async function seedGrouPhaseMatches() {
   await prisma.match.createMany({
-    data: matches as any,
+    data: groupPhaseMatches,
   })
 }
 
-main()
+async function seedKnockoutPhaseMatches() {
+  await prisma.match.createMany({
+    data: knockoutPhaseMatches,
+  })
+}
+
+// seedGrouPhaseMatches()
+// seedKnockoutPhaseMatches()
