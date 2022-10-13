@@ -16,7 +16,7 @@ export function Guesses() {
     <div className="min-h-screen bg-white flex flex-col items-center">
       <Header>
         <section className="text-white w-full">
-          <span className="text-base text-white">Olá, Fulano!</span>
+          <span className="text-base text-white">Olá, {auth.user.name}!</span>
           <h1 className="text-2xl font-bold mt-4">Qual é o seu palpite?</h1>
         </section>
       </Header>

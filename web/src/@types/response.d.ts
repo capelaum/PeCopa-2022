@@ -1,3 +1,4 @@
+import { Guess } from './guess'
 import { User } from './user'
 
 export type ResponseData = {
@@ -12,4 +13,9 @@ export type AuthData = {
 
 export type MatchesData = {
   data: Match[]
+}
+
+export type NewGuessResponse = {
+  guess: Guess
+  message: string
 }

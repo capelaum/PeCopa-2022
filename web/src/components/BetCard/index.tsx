@@ -1,8 +1,13 @@
 import { Match } from '@/@types/match'
+import { AuthData, NewGuessResponse } from '@/@types/response'
 import { BetScore } from '@/components/BetScore'
 import { TeamCard } from '@/components/TeamCard'
+import { api } from '@/services/api'
 import { format } from 'date-fns'
 import { useState } from 'react'
+import { ThreeDots } from 'react-loader-spinner'
+import { toast } from 'react-toastify'
+import { useLocalStorage } from 'react-use'
 
 interface BetCardProps {
   match: Match
@@ -10,6 +15,10 @@ interface BetCardProps {
 }
 
 export function BetCard({ match, isAllBetsDisabled }: BetCardProps) {
+  const [homeTeamScore, setHomeTeamScore] = useState<number | null>(null)
+  const [awayTeamScore, setAwayTeamScore] = useState<number | null>(null)
+  const [isCreatingGuess, setIsCreatingGuess] = useState(false)
+
   const { matchTime, homeTeam, awayTeam, group, round } = match
   const isBetDisabled =
     new Date(matchTime) < new Date() ||
@@ -18,8 +27,7 @@ export function BetCard({ match, isAllBetsDisabled }: BetCardProps) {
     awayTeam.slug === '?' ||
     isAllBetsDisabled
 
-  const [homeTeamScore, setHomeTeamScore] = useState<number | null>(null)
-  const [awayTeamScore, setAwayTeamScore] = useState<number | null>(null)
+  const [auth] = useLocalStorage('@pecopa-2022:auth', {} as AuthData)
 
   const handleSetHomeTeamScore = (isIncrease = true) => {
     setHomeTeamScore((score) => {
@@ -43,6 +51,43 @@ export function BetCard({ match, isAllBetsDisabled }: BetCardProps) {
 
       return isIncrease ? score + 1 : score - 1
     })
+  }
+
+  const handleCreateGuess = async () => {
+    setIsCreatingGuess(true)
+
+    if (homeTeamScore === null || awayTeamScore === null) {
+      toast.error('Você precisa preencher os dois placares para apostar!')
+      setIsCreatingGuess(false)
+      return
+    }
+
+    try {
+      const { data: newGuessData }: { data: NewGuessResponse } = await api.post(
+        '/guesses',
+        {
+          userId: auth?.user.id,
+          matchId: match.id,
+          homeTeamScore,
+          awayTeamScore,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${auth?.token}`,
+          },
+        }
+      )
+
+      toast.success(newGuessData.message)
+
+      console.log('🚀 ~ newGuessData', newGuessData)
+
+      setIsCreatingGuess(false)
+    } catch (error) {
+      console.log('🚀 ~ error', error)
+      toast.error((error as any).response.data.message)
+      setIsCreatingGuess(false)
+    }
   }
 
   return (
@@ -88,7 +133,25 @@ export function BetCard({ match, isAllBetsDisabled }: BetCardProps) {
       </div>
 
       {!isBetDisabled && (
-        <button className="button button-primary w-full mt-5">Apostar</button>
+        <button
+          onClick={handleCreateGuess}
+          className="button button-primary w-full mt-5"
+          disabled={isCreatingGuess}
+        >
+          {isCreatingGuess ? (
+            <ThreeDots
+              height="30"
+              width="30"
+              radius="9"
+              color="#F4F6FF"
+              ariaLabel="three-dots-loading"
+              wrapperStyle={{}}
+              visible={true}
+            />
+          ) : (
+            'Apostar'
+          )}
+        </button>
       )}
     </div>
   )
