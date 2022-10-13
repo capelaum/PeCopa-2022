@@ -3,13 +3,17 @@ import { BetsContainer } from '@/components/BetsContainer'
 import { Footer } from '@/components/Footer'
 import { Header } from '@/components/Header'
 import { api } from '@/services/api'
-import { MdArrowBack } from 'react-icons/md'
+import { TbCopy } from 'react-icons/tb'
 import { ThreeDots } from 'react-loader-spinner'
-import { NavLink, useParams } from 'react-router-dom'
-import { useAsync } from 'react-use'
+import { useParams } from 'react-router-dom'
+import { toast } from 'react-toastify'
+import { useAsync, useCopyToClipboard } from 'react-use'
 
 export function Bets() {
   const { username } = useParams()
+  const [_, copyToClipboard] = useCopyToClipboard()
+
+  const link = `${import.meta.env.VITE_APP_URL}/apostas/${username}`
 
   const user = useAsync(async () => {
     const { data }: UserData = await api.get(`/users/${username}`)
@@ -23,29 +27,28 @@ export function Bets() {
     <div className="min-h-screen bg-white flex flex-col items-center">
       <Header>
         <section className="text-white w-full flex gap-4 items-center">
-          <NavLink to="/palpites" title="Fazer palpites">
-            <MdArrowBack size={32} color="#F4F6FF" />
-          </NavLink>
-
-          <h1 className="text-xl sm:text-2xl font-bold">
-            {isValidUser ? (
-              user.value.username
-            ) : (
-              <ThreeDots
-                height="50"
-                width="50"
-                color="#F4F6FF"
-                ariaLabel="three-dots-loading"
-                visible={true}
-              />
-            )}
-          </h1>
+          {isValidUser && (
+            <div className="flex flex-col gap-2 items-start">
+              <span className="font-bold">Compartilhe seus palpites!</span>
+              <button
+                onClick={() => {
+                  copyToClipboard(link)
+                  toast.info('Link copiado!')
+                }}
+                title="Copiar link"
+                className="flex justify-start items-center bg-red-300 p-2 rounded-lg hover:bg-opacity-90 hover:cursor-pointer"
+              >
+                {link}
+                <TbCopy size={20} className="ml-2" />
+              </button>
+            </div>
+          )}
         </section>
       </Header>
 
       <main className="max-w-[712px] w-full flex flex-col items-center gap-8 my-8 px-5 flex-1">
-        <h2 className="w-full text-red-500 font-bold text-2xl">
-          Seus palpites
+        <h2 className="w-full text-red-500 font-bold text-xl sm:text-2xl">
+          Palpites de {isValidUser ? user.value.username : '🥲'}
         </h2>
 
         {user.loading && (

@@ -1,5 +1,5 @@
 <div align="center">
-  <h1>Bolao da Copa do Mundo 2022 do Catar</h1>
+  <h1>PeCopa 2022</h1>
   <h3>Aplicação para realizar palpites ou apostas de placares dos jogos da Copa do Mundo de 2022 no Catar.</h3>
   <br />
   <img src=".github/Capa.png" alt="Imagem de capa do porjeto bolao da copa 2022." />
