@@ -42,7 +42,7 @@
 
 ## Créditos
 
-Projeto foi realizado no evento Input
+Projeto foi realizado no evento Input da [Codar.me](https://codar.me/input)
 
 [prisma]: https://www.prisma.io
 [dotenv-safe]: https://www.npmjs.com/package/dotenv-safe
