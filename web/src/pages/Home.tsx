@@ -11,8 +11,8 @@ export function Home() {
 
   return (
     <div className="min-h-screen px-6 py-8 bg-red-700 text-white flex flex-col items-center justify-center">
-      <header className="max-w-[100px] mb-10 md:mb-20">
-        <img src="/assets/logo/logo-bg-wine.svg" alt="NaTrave Logo" />
+      <header className="max-w-[150px] mb-10 md:mb-20">
+        <img src="/assets/logo/pecopa_whine.svg" alt="NaTrave Logo" />
       </header>
 
       <main className="max-w-7xl flex flex-col md:flex-row items-center justify-between gap-6 md:gap-16">

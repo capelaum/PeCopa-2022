@@ -3,7 +3,7 @@ export function Footer() {
     <footer className="w-full flex flex-col justify-center items-center bg-red-500 text-white px-5 pt-8 pb-2">
       <div className="w-full max-w-2xl flex flex-col gap-8 items-center justify-between">
         <img
-          src="/assets/logo/logo-bg-red.svg"
+          src="/assets/logo/pecopa_red.svg"
           alt="NaTrave Logo"
           className="max-w-[100px]"
         />

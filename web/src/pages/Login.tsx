@@ -34,7 +34,7 @@ export function Login() {
     <div className="min-h-screen bg-white text-white flex flex-col items-center overflow-hidden">
       <header className="w-full flex justify-center px-5 py-5 border-b-2 border-red-300">
         <div className="max-w-[150px]">
-          <img src="/assets/logo/logo-bg-white.svg" alt="NaTrave Logo" />
+          <img src="/assets/logo/pecopa_white.svg" alt="NaTrave Logo" />
         </div>
       </header>
 

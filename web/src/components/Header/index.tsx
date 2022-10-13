@@ -23,7 +23,7 @@ export function Header({ children }: HeaderProps) {
       <div className="max-w-2xl w-full flex flex-col gap-10">
         <section className="w-full flex justify-between items-center">
           <img
-            src="/assets/logo/logo-bg-red.svg"
+            src="/assets/logo/pecopa_red.svg"
             alt="NaTrave Logo"
             className="max-w-[100px]"
           />
