@@ -1,22 +1,35 @@
-import { Match } from '@/@types/match'
+import { MatchesData } from '@/@types/response'
+import { api } from '@/services/api'
+import { addDays, subDays } from 'date-fns'
+import { useState } from 'react'
 import { ThreeDots } from 'react-loader-spinner'
-import { AsyncState } from 'react-use/lib/useAsync'
+import { useAsync } from 'react-use'
 import { BetCard } from '../BetCard'
 import { DatePicker } from '../DatePicker'
 
-interface BetsContainerProps {
-  matches: AsyncState<Match[]>
-  selectedDate: Date
-  prevDay: () => void
-  nextDay: () => void
-}
+export function BetsContainer() {
+  const [selectedDate, setSelectedDate] = useState(new Date(2022, 10, 20))
 
-export function BetsContainer({
-  matches,
-  selectedDate,
-  prevDay,
-  nextDay,
-}: BetsContainerProps) {
+  const matches = useAsync(async () => {
+    const { data }: MatchesData = await api.get(
+      `/matches?matchTime=${new Date(selectedDate).toISOString()}`
+    )
+
+    return data
+  }, [selectedDate])
+
+  function prevDay() {
+    const prevDate = subDays(selectedDate, 1)
+
+    setSelectedDate(prevDate)
+  }
+
+  function nextDay() {
+    const nextDate = addDays(selectedDate, 1)
+
+    setSelectedDate(nextDate)
+  }
+
   return (
     <>
       <DatePicker

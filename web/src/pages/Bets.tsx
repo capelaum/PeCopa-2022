@@ -1,37 +1,10 @@
-import { MatchesData } from '@/@types/response'
 import { BetsContainer } from '@/components/BetsContainer'
 import { Footer } from '@/components/Footer'
 import { Header } from '@/components/Header'
-import { api } from '@/services/api'
-import { addDays, subDays } from 'date-fns'
-import { useState } from 'react'
 import { MdArrowBack } from 'react-icons/md'
 import { NavLink } from 'react-router-dom'
-import { useAsync } from 'react-use'
 
 export function Bets() {
-  const [selectedDate, setSelectedDate] = useState(new Date(2022, 10, 20))
-
-  const matches = useAsync(async () => {
-    const { data }: MatchesData = await api.get(
-      `/matches?matchTime=${new Date(selectedDate).toISOString()}`
-    )
-
-    return data
-  }, [selectedDate])
-
-  function prevDay() {
-    const prevDate = subDays(selectedDate, 1)
-
-    setSelectedDate(prevDate)
-  }
-
-  function nextDay() {
-    const nextDate = addDays(selectedDate, 1)
-
-    setSelectedDate(nextDate)
-  }
-
   return (
     <div className="min-h-screen bg-white flex flex-col items-center">
       <Header>
@@ -51,12 +24,7 @@ export function Bets() {
           Seus palpites
         </h2>
 
-        <BetsContainer
-          matches={matches}
-          selectedDate={selectedDate}
-          prevDay={prevDay}
-          nextDay={nextDay}
-        />
+        <BetsContainer />
       </main>
 
       <Footer />
