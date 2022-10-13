@@ -1,7 +1,8 @@
 import { AuthData } from '@/@types/response'
 import { ReactNode } from 'react'
-import { BsBookmarkStarFill } from 'react-icons/bs'
-import { TbLogout, TbUserCircle } from 'react-icons/tb'
+import { BsPeopleFill } from 'react-icons/bs'
+import { MdHome, MdPerson } from 'react-icons/md'
+import { TbEdit, TbLogout, TbStars } from 'react-icons/tb'
 import { NavLink } from 'react-router-dom'
 import { useLocalStorage } from 'react-use'
 
@@ -28,22 +29,40 @@ export function Header({ children }: HeaderProps) {
             className="max-w-[100px]"
           />
 
-          {auth?.user?.id && (
+          {auth?.user?.id ? (
             <div className="flex items-center gap-4">
               <NavLink
                 to={`/apostas/${auth.user.username}`}
                 title="Seus palpites"
               >
-                <BsBookmarkStarFill size={24} color="#F4F6FF" />
+                <TbStars size={24} color="#F4F6FF" />
+              </NavLink>
+
+              <NavLink to="/palpites" title="Fazer palpites">
+                <TbEdit size={28} color="#F4F6FF" />
+              </NavLink>
+
+              <NavLink to="/lista" title="Listagem de jogadores">
+                <BsPeopleFill size={24} color="#F4F6FF" />
               </NavLink>
 
               <NavLink to="/perfil" title="Editar perfil">
-                <TbUserCircle size={32} color="#F4F6FF" />
+                <MdPerson size={32} color="#F4F6FF" />
               </NavLink>
 
               <button title="Sair da conta." onClick={logout}>
                 <TbLogout size={32} color="#F4F6FF" />
               </button>
+            </div>
+          ) : (
+            <div className="flex items-center gap-4">
+              <NavLink to="/lista" title="Listagem de jogadores">
+                <BsPeopleFill size={24} color="#F4F6FF" />
+              </NavLink>
+
+              <NavLink to="/" title="Home">
+                <MdHome size={28} color="#F4F6FF" />
+              </NavLink>
             </div>
           )}
         </section>

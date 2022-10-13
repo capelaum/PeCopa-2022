@@ -17,7 +17,9 @@ export function Guesses() {
       <Header>
         <section className="text-white w-full">
           <span className="text-base text-white">Olá, {auth.user.name}!</span>
-          <h1 className="text-2xl font-bold mt-4">Qual é o seu palpite?</h1>
+          <h1 className="text-xl sm:text-2xl font-bold mt-4">
+            Quais os seus palpites?
+          </h1>
         </section>
       </Header>
 

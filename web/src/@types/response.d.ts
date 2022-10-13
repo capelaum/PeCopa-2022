@@ -28,3 +28,7 @@ export type GuessesData = {
 export type UserData = {
   data: User
 }
+
+export type UsersData = {
+  data: User[]
+}

@@ -9,6 +9,11 @@ export const listUsers = async (ctx: RouterContext) => {
         name: true,
         username: true,
         email: true,
+        Guess: {
+          select: {
+            id: true,
+          },
+        },
       },
     })
 
@@ -18,6 +23,7 @@ export const listUsers = async (ctx: RouterContext) => {
         name: user.name,
         username: user.username,
         email: user.email,
+        totalGuesses: user.Guess.length,
       }
     })
 
