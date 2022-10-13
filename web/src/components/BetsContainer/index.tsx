@@ -9,12 +9,12 @@ import { DatePicker } from '../DatePicker'
 
 interface BetsContainerProps {
   isAllBetsDisabled?: boolean
-  userId: string
+  username: string
 }
 
 export function BetsContainer({
   isAllBetsDisabled,
-  userId,
+  username,
 }: BetsContainerProps) {
   const [selectedDate, setSelectedDate] = useState(new Date(2022, 10, 20))
   const [isGoNextDay, setGoNextDay] = useState(true)
@@ -38,10 +38,10 @@ export function BetsContainer({
   }, [selectedDate])
 
   const guesses = useAsyncRetry(async () => {
-    const { data }: GuessesData = await api.get(`/guesses?userId=${userId}`)
+    const { data }: GuessesData = await api.get(`/guesses/${username}`)
 
     return data
-  }, [userId])
+  }, [username])
 
   function prevDay() {
     const prevDate = subDays(selectedDate, 1)

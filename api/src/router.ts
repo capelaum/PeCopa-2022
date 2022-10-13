@@ -2,16 +2,20 @@ import Router from '@koa/router'
 import { createGuess } from './app/guesses/useCases/createGuess'
 import { listGuesses } from './app/guesses/useCases/listGuesses'
 import * as matches from './app/matches'
-import * as users from './app/users'
+import { createUser } from './app/users/useCases/createUser'
+import { getUser } from './app/users/useCases/getUser'
+import { listUsers } from './app/users/useCases/listUsers'
+import { login } from './app/users/useCases/login'
 
 export const router = new Router()
 
-router.get('/login', users.login)
+router.get('/login', login)
 
-router.get('/users', users.list)
-router.post('/users', users.create)
+router.get('/users', listUsers)
+router.post('/users', createUser)
+router.get('/users/:username', getUser)
 
-router.get('/guesses', listGuesses)
 router.post('/guesses', createGuess)
+router.get('/guesses/:username', listGuesses)
 
 router.get('/matches', matches.list)
