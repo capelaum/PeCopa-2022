@@ -1,7 +1,16 @@
+import { AuthData } from '@/@types/response'
 import { Footer } from '@/components/Footer'
 import { Header } from '@/components/Header'
+import { Navigate } from 'react-router-dom'
+import { useLocalStorage } from 'react-use'
 
 export function Profile() {
+  const [auth] = useLocalStorage('@pecopa-2022:auth', {} as AuthData)
+
+  if (!auth?.user?.id) {
+    return <Navigate to="/" replace />
+  }
+
   return (
     <div className="min-h-screen bg-white flex flex-col items-center">
       <Header>

@@ -1,20 +1,34 @@
+import { LoginFormValues } from '@/@types/form'
+import { AuthData } from '@/@types/response'
 import { Input } from '@/components/Input'
 import { login } from '@/libs/authLib'
 import { loginValidationSchema } from '@/validations/formValidations'
 import { useFormik } from 'formik'
 import { MdArrowBack } from 'react-icons/md'
 import { ThreeDots } from 'react-loader-spinner'
-import { NavLink } from 'react-router-dom'
+import { Navigate, NavLink } from 'react-router-dom'
+import { useLocalStorage } from 'react-use'
 
 export function Login() {
+  const [auth, setAuth] = useLocalStorage('@pecopa-2022:auth', {} as AuthData)
+
+  if (auth?.user?.id) {
+    return <Navigate to="/dashboard" replace />
+  }
+
   const formik = useFormik({
-    onSubmit: (values) => login(values),
+    onSubmit: (values) => handleLogin(values),
     initialValues: {
       email: '',
       password: '',
     },
     validationSchema: loginValidationSchema,
   })
+
+  const handleLogin = async (values: LoginFormValues) => {
+    const data = await login(values)
+    setAuth(data)
+  }
 
   return (
     <div className="min-h-screen bg-white text-white flex flex-col items-center overflow-hidden">

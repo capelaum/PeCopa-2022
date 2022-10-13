@@ -1,6 +1,14 @@
-import { NavLink } from 'react-router-dom'
+import { AuthData } from '@/@types/response'
+import { Navigate, NavLink } from 'react-router-dom'
+import { useLocalStorage } from 'react-use'
 
 export function Home() {
+  const [auth] = useLocalStorage('@pecopa-2022:auth', {} as AuthData)
+
+  if (auth?.user?.id) {
+    return <Navigate to="/dashboard" replace />
+  }
+
   return (
     <div className="min-h-screen px-6 py-8 bg-red-700 text-white flex flex-col items-center justify-center">
       <header className="max-w-[100px] mb-10 md:mb-20">

@@ -1,12 +1,20 @@
+import { AuthData } from '@/@types/response'
 import { Input } from '@/components/Input'
 import { register } from '@/libs/authLib'
 import { registerValidationSchema } from '@/validations/formValidations'
 import { useFormik } from 'formik'
 import { MdArrowBack } from 'react-icons/md'
 import { ThreeDots } from 'react-loader-spinner'
-import { NavLink } from 'react-router-dom'
+import { Navigate, NavLink } from 'react-router-dom'
+import { useLocalStorage } from 'react-use'
 
 export function Register() {
+  const [auth] = useLocalStorage('@pecopa-2022:auth', {} as AuthData)
+
+  if (auth?.user?.id) {
+    return <Navigate to="/dashboard" replace />
+  }
+
   const formik = useFormik({
     onSubmit: (values) => register(values),
     initialValues: {
