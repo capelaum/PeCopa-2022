@@ -63,7 +63,7 @@ export function Bets() {
     <div className="min-h-screen bg-white flex flex-col items-center">
       <Header>
         <section className="text-white w-full flex gap-4 items-center">
-          <NavLink to="/dashboard" title="Fazer palpites">
+          <NavLink to="/palpites" title="Fazer palpites">
             <MdArrowBack size={32} color="#F4F6FF" />
           </NavLink>
 

@@ -20,7 +20,7 @@ const router = createBrowserRouter([
     element: <Register />,
   },
   {
-    path: '/dashboard',
+    path: '/palpites',
     element: <Dashboard />,
   },
   {

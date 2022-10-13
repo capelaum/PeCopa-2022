@@ -6,7 +6,7 @@ export function Home() {
   const [auth] = useLocalStorage('@pecopa-2022:auth', {} as AuthData)
 
   if (auth?.user?.id) {
-    return <Navigate to="/dashboard" replace />
+    return <Navigate to="/palpites" replace />
   }
 
   return (
