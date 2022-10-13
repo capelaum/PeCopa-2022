@@ -12,7 +12,11 @@ interface HeaderProps {
 export function Header({ children }: HeaderProps) {
   const [auth, setAuth] = useLocalStorage('@pecopa-2022:auth', {} as AuthData)
 
-  const logout = () => setAuth({} as AuthData)
+  const logout = () => {
+    setAuth({} as AuthData)
+
+    window.location.reload()
+  }
 
   return (
     <header className="bg-red-500 w-full px-5 py-6 flex flex-col items-center">
@@ -25,11 +29,11 @@ export function Header({ children }: HeaderProps) {
           />
 
           <div className="flex items-center gap-4">
-            <NavLink to="/bets" title="Seus palpites">
+            <NavLink to="/apostas" title="Seus palpites">
               <BsBookmarkStarFill size={24} color="#F4F6FF" />
             </NavLink>
 
-            <NavLink to="/profile" title="Editar perfil">
+            <NavLink to="/perfil" title="Editar perfil">
               <TbUserCircle size={32} color="#F4F6FF" />
             </NavLink>
 

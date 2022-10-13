@@ -1,3 +1,4 @@
+import { RegisterFormValues } from '@/@types/form'
 import { AuthData } from '@/@types/response'
 import { Input } from '@/components/Input'
 import { register } from '@/libs/authLib'
@@ -9,14 +10,10 @@ import { Navigate, NavLink } from 'react-router-dom'
 import { useLocalStorage } from 'react-use'
 
 export function Register() {
-  const [auth] = useLocalStorage('@pecopa-2022:auth', {} as AuthData)
-
-  if (auth?.user?.id) {
-    return <Navigate to="/dashboard" replace />
-  }
+  const [auth, setAuth] = useLocalStorage('@pecopa-2022:auth', {} as AuthData)
 
   const formik = useFormik({
-    onSubmit: (values) => register(values),
+    onSubmit: (values) => handleRegister(values),
     initialValues: {
       name: '',
       username: '',
@@ -25,6 +22,15 @@ export function Register() {
     },
     validationSchema: registerValidationSchema,
   })
+
+  const handleRegister = async (values: RegisterFormValues) => {
+    const data = await register(values)
+    setAuth(data)
+  }
+
+  if (auth?.user?.id) {
+    return <Navigate to="/dashboard" replace />
+  }
 
   return (
     <div className="min-h-screen bg-white text-white flex flex-col items-center">

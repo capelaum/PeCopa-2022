@@ -8,11 +8,11 @@ export const register = async (values: RegisterFormValues) => {
   try {
     const response: ResponseData = await api.post('/users', values)
 
-    const {
-      data: { user, message },
-    } = response
+    const { data } = response
 
-    toast.success(message)
+    toast.success(data.message)
+
+    return data
   } catch (error) {
     toast.error((error as any).response.data.message)
   }

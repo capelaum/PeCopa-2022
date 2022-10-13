@@ -43,8 +43,18 @@ export const create = async (ctx: RouterContext) => {
       },
     })
 
+    const token = jwt.sign(
+      {
+        sub: user.id,
+        name: user.name,
+        expiresIn: '7d',
+      },
+      process.env.JWT_SECRET!
+    )
+
     ctx.status = 201
     ctx.body = {
+      token,
       user,
       message: 'Conta criada com sucesso!',
     }

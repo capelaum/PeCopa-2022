@@ -16,7 +16,7 @@ const router = createBrowserRouter([
     element: <Login />,
   },
   {
-    path: '/register',
+    path: '/cadastro',
     element: <Register />,
   },
   {
@@ -24,11 +24,11 @@ const router = createBrowserRouter([
     element: <Dashboard />,
   },
   {
-    path: '/bets',
+    path: '/apostas',
     element: <Bets />,
   },
   {
-    path: '/profile',
+    path: '/perfil',
     element: <Profile />,
   },
 ])

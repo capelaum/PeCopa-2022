@@ -12,10 +12,6 @@ import { useLocalStorage } from 'react-use'
 export function Login() {
   const [auth, setAuth] = useLocalStorage('@pecopa-2022:auth', {} as AuthData)
 
-  if (auth?.user?.id) {
-    return <Navigate to="/dashboard" replace />
-  }
-
   const formik = useFormik({
     onSubmit: (values) => handleLogin(values),
     initialValues: {
@@ -28,6 +24,10 @@ export function Login() {
   const handleLogin = async (values: LoginFormValues) => {
     const data = await login(values)
     setAuth(data)
+  }
+
+  if (auth?.user?.id) {
+    return <Navigate to="/dashboard" replace />
   }
 
   return (

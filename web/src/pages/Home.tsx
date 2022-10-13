@@ -29,7 +29,7 @@ export function Home() {
           </h1>
 
           <NavLink
-            to="/register"
+            to="/cadastro"
             title="Criar minha conta"
             className="
               button
