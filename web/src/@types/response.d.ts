@@ -24,3 +24,7 @@ export type NewGuessResponse = {
 export type GuessesData = {
   data: Guess[]
 }
+
+export type UserData = {
+  data: User
+}

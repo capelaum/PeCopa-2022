@@ -30,7 +30,10 @@ export function Header({ children }: HeaderProps) {
 
           {auth?.user?.id && (
             <div className="flex items-center gap-4">
-              <NavLink to="/apostas" title="Seus palpites">
+              <NavLink
+                to={`/apostas/${auth.user.username}`}
+                title="Seus palpites"
+              >
                 <BsBookmarkStarFill size={24} color="#F4F6FF" />
               </NavLink>
 

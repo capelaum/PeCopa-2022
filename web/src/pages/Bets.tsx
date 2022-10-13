@@ -1,10 +1,24 @@
+import { UserData } from '@/@types/response'
 import { BetsContainer } from '@/components/BetsContainer'
 import { Footer } from '@/components/Footer'
 import { Header } from '@/components/Header'
+import { api } from '@/services/api'
 import { MdArrowBack } from 'react-icons/md'
-import { NavLink } from 'react-router-dom'
+import { ThreeDots } from 'react-loader-spinner'
+import { NavLink, useParams } from 'react-router-dom'
+import { useAsync } from 'react-use'
 
 export function Bets() {
+  const { username } = useParams()
+
+  const user = useAsync(async () => {
+    const { data }: UserData = await api.get(`/users/${username}`)
+
+    return data
+  }, [username])
+
+  const isValidUser = !user.loading && !user.error && !!user.value
+
   return (
     <div className="min-h-screen bg-white flex flex-col items-center">
       <Header>
@@ -14,7 +28,17 @@ export function Bets() {
           </NavLink>
 
           <h1 className="text-xl sm:text-2xl font-bold">
-            Luís Vinicius Capelletto
+            {isValidUser ? (
+              user.value.username
+            ) : (
+              <ThreeDots
+                height="50"
+                width="50"
+                color="#F4F6FF"
+                ariaLabel="three-dots-loading"
+                visible={true}
+              />
+            )}
           </h1>
         </section>
       </Header>
@@ -24,7 +48,25 @@ export function Bets() {
           Seus palpites
         </h2>
 
-        <BetsContainer username="capelaum" isAllBetsDisabled />
+        {user.loading && (
+          <ThreeDots
+            height="50"
+            width="50"
+            color="#AF053F"
+            ariaLabel="three-dots-loading"
+            visible={true}
+          />
+        )}
+
+        {user.error && (
+          <span className="font-bold text-lg text-red-500">
+            Oops! Algo deu errado, usuário não encontrado 🥲
+          </span>
+        )}
+
+        {isValidUser && (
+          <BetsContainer username={user.value.username} isAllBetsDisabled />
+        )}
       </main>
 
       <Footer />

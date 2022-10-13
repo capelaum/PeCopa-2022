@@ -31,6 +31,7 @@ export const getUser = async (ctx: RouterContext) => {
     ctx.body = {
       id: user.id,
       name: user.name,
+      username: user.username,
       email: user.email,
       createdAt: user.created_at,
       updatedAt: user.updated_at,
