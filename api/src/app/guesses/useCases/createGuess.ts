@@ -10,7 +10,9 @@ import { verifyToken } from '../validations/tokenValidation'
 export const createGuess = async (ctx: RouterContext) => {
   const { matchId, homeTeamScore, awayTeamScore } = ctx.request.body as NewGuess
 
-  if (!validateCreateGuessRequest(ctx)) {
+  const isValidCreateGuessRequest = await validateCreateGuessRequest(ctx)
+
+  if (!isValidCreateGuessRequest) {
     return
   }
 
