@@ -9,23 +9,36 @@ import { DatePicker } from '../DatePicker'
 
 export function BetsContainer() {
   const [selectedDate, setSelectedDate] = useState(new Date(2022, 10, 20))
+  const [isGoNextDay, setGoNextDay] = useState(true)
 
   const matches = useAsync(async () => {
     const { data }: MatchesData = await api.get(
       `/matches?matchTime=${new Date(selectedDate).toISOString()}`
     )
 
+    if (data.length === 0) {
+      if (isGoNextDay) {
+        setSelectedDate(addDays(selectedDate, 1))
+      }
+
+      if (!isGoNextDay) {
+        setSelectedDate(subDays(selectedDate, 1))
+      }
+    }
+
     return data
   }, [selectedDate])
 
   function prevDay() {
     const prevDate = subDays(selectedDate, 1)
+    setGoNextDay(false)
 
     setSelectedDate(prevDate)
   }
 
   function nextDay() {
     const nextDate = addDays(selectedDate, 1)
+    setGoNextDay(true)
 
     setSelectedDate(nextDate)
   }
@@ -38,7 +51,7 @@ export function BetsContainer() {
         selectedDate={selectedDate}
       />
 
-      <div className="w-full flex flex-col items-center gap-5">
+      <section className="w-full flex flex-col items-center gap-5">
         {matches.loading && (
           <ThreeDots
             height="30"
@@ -58,7 +71,7 @@ export function BetsContainer() {
           matches.value?.map((match) => (
             <BetCard key={match.id} match={match} />
           ))}
-      </div>
+      </section>
     </>
   )
 }

@@ -13,16 +13,22 @@ export function DatePicker({
   nextDay,
   selectedDate,
 }: DatePickerProps) {
+  const isPrevButtonDisabled =
+    selectedDate < new Date() || selectedDate <= new Date(2022, 10, 20)
+  const isNextButtonDisabled =
+    selectedDate < new Date() || selectedDate >= new Date(2022, 11, 18)
+
   return (
     <div className="flex justify-between items-center gap-4">
       <button
         onClick={prevDay}
-        disabled={
-          selectedDate < new Date() || selectedDate <= new Date(2022, 10, 20)
-        }
+        disabled={isPrevButtonDisabled}
         className="date-picker-button"
       >
-        <MdChevronLeft size={40} color="#AF053F" />
+        <MdChevronLeft
+          size={40}
+          color={isPrevButtonDisabled ? '#91949D' : '#AF053F'}
+        />
       </button>
 
       <span className="text-red-700 font-bold text-lg sm:text-xl">
@@ -33,12 +39,13 @@ export function DatePicker({
 
       <button
         onClick={nextDay}
-        disabled={
-          selectedDate < new Date() || selectedDate >= new Date(2022, 11, 2)
-        }
+        disabled={isNextButtonDisabled}
         className="date-picker-button"
       >
-        <MdChevronRight size={40} color="#AF053F" />
+        <MdChevronRight
+          size={40}
+          color={isNextButtonDisabled ? '#91949D' : '#AF053F'}
+        />
       </button>
     </div>
   )

@@ -47,7 +47,7 @@ body {
 }
 
 .bet-button {
-  @apply border h-6 w-10 rounded-md
+  @apply border h-6 w-full rounded-md
     flex items-center justify-center
     transition-all duration-300 border-none
   bg-white hover:bg-red-100;
@@ -57,7 +57,7 @@ body {
   @apply flex items-center justify-center
     transition-all duration-300
   bg-white rounded-xl hover:bg-red-100
-  disabled:bg-gray-200 disabled:cursor-not-allowed;
+    disabled:bg-transparent disabled:cursor-not-allowed;
 }
 
 input[type='number']::-webkit-inner-spin-button,

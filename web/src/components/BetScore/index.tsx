@@ -1,19 +1,29 @@
 import { TbChevronDown, TbChevronUp } from 'react-icons/tb'
 
-export function BetScore() {
+interface BetScoreProps {
+  score: number | null
+  isBetDisabled: boolean
+  setScore: (isIncrease: boolean) => void
+}
+
+export function BetScore({ score, isBetDisabled, setScore }: BetScoreProps) {
   return (
     <div className="flex flex-col items-center gap-2">
-      <button className="bet-button">
-        <TbChevronUp size={32} color="#AF053F" />
-      </button>
+      {!isBetDisabled && (
+        <button className="bet-button" onClick={() => setScore(true)}>
+          <TbChevronUp size={32} color="#AF053F" />
+        </button>
+      )}
 
       <div className="bet-number">
-        <span>-</span>
+        <span>{score ?? '-'}</span>
       </div>
 
-      <button className="bet-button">
-        <TbChevronDown size={32} color="#AF053F" />
-      </button>
+      {!isBetDisabled && (
+        <button className="bet-button" onClick={() => setScore(false)}>
+          <TbChevronDown size={32} color="#AF053F" />
+        </button>
+      )}
     </div>
   )
 }
