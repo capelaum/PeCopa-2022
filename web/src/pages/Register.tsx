@@ -29,7 +29,7 @@ export function Register() {
   }
 
   if (auth?.user?.id) {
-    return <Navigate to="/dashboard" replace />
+    return <Navigate to="/palpites" replace />
   }
 
   return (

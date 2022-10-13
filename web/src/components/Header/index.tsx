@@ -28,19 +28,21 @@ export function Header({ children }: HeaderProps) {
             className="max-w-[100px]"
           />
 
-          <div className="flex items-center gap-4">
-            <NavLink to="/apostas" title="Seus palpites">
-              <BsBookmarkStarFill size={24} color="#F4F6FF" />
-            </NavLink>
+          {auth?.user?.id && (
+            <div className="flex items-center gap-4">
+              <NavLink to="/apostas" title="Seus palpites">
+                <BsBookmarkStarFill size={24} color="#F4F6FF" />
+              </NavLink>
 
-            <NavLink to="/perfil" title="Editar perfil">
-              <TbUserCircle size={32} color="#F4F6FF" />
-            </NavLink>
+              <NavLink to="/perfil" title="Editar perfil">
+                <TbUserCircle size={32} color="#F4F6FF" />
+              </NavLink>
 
-            <button title="Sair da conta." onClick={logout}>
-              <TbLogout size={32} color="#F4F6FF" />
-            </button>
-          </div>
+              <button title="Sair da conta." onClick={logout}>
+                <TbLogout size={32} color="#F4F6FF" />
+              </button>
+            </div>
+          )}
         </section>
 
         {children}

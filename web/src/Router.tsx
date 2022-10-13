@@ -1,6 +1,6 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import { Bets } from './pages/Bets'
-import { Dashboard } from './pages/Dashboard'
+import { Guesses } from './pages/Guesses'
 import { Home } from './pages/Home'
 import { Login } from './pages/Login'
 import { Profile } from './pages/Profile'
@@ -21,7 +21,7 @@ const router = createBrowserRouter([
   },
   {
     path: '/palpites',
-    element: <Dashboard />,
+    element: <Guesses />,
   },
   {
     path: '/apostas',

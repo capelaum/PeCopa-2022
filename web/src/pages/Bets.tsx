@@ -1,4 +1,3 @@
-import { AuthData } from '@/@types/response'
 import { BetCard } from '@/components/BetCard'
 import { DatePicker } from '@/components/DatePicker'
 import { Footer } from '@/components/Footer'
@@ -6,8 +5,7 @@ import { Header } from '@/components/Header'
 import { addDays, subDays } from 'date-fns'
 import { useState } from 'react'
 import { MdArrowBack } from 'react-icons/md'
-import { Navigate, NavLink } from 'react-router-dom'
-import { useLocalStorage } from 'react-use'
+import { NavLink } from 'react-router-dom'
 
 const matches = [
   {
@@ -37,12 +35,6 @@ const matches = [
 ]
 
 export function Bets() {
-  const [auth] = useLocalStorage('@pecopa-2022:auth', {} as AuthData)
-
-  if (!auth?.user?.id) {
-    return <Navigate to="/" replace />
-  }
-
   const [selectedDate, setSelectedDate] = useState(
     new Date('2022-11-20T00:00:00.000Z')
   )

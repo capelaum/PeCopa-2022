@@ -35,7 +35,7 @@ const matches = [
   },
 ]
 
-export function Dashboard() {
+export function Guesses() {
   const [auth] = useLocalStorage('@pecopa-2022:auth', {} as AuthData)
 
   if (!auth?.user?.id) {
