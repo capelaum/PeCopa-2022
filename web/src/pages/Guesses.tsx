@@ -22,7 +22,7 @@ export function Guesses() {
       </Header>
 
       <main className="max-w-[712px] w-full flex flex-col items-center gap-8 my-8 px-5 flex-1">
-        <BetsContainer />
+        <BetsContainer userId={auth.user.id} />
       </main>
 
       <Footer />

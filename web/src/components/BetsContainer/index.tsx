@@ -1,17 +1,21 @@
-import { MatchesData } from '@/@types/response'
+import { GuessesData, MatchesData } from '@/@types/response'
 import { api } from '@/services/api'
 import { addDays, subDays } from 'date-fns'
 import { useState } from 'react'
 import { ThreeDots } from 'react-loader-spinner'
-import { useAsync } from 'react-use'
+import { useAsync, useAsyncRetry } from 'react-use'
 import { BetCard } from '../BetCard'
 import { DatePicker } from '../DatePicker'
 
 interface BetsContainerProps {
   isAllBetsDisabled?: boolean
+  userId: string
 }
 
-export function BetsContainer({ isAllBetsDisabled }: BetsContainerProps) {
+export function BetsContainer({
+  isAllBetsDisabled,
+  userId,
+}: BetsContainerProps) {
   const [selectedDate, setSelectedDate] = useState(new Date(2022, 10, 20))
   const [isGoNextDay, setGoNextDay] = useState(true)
 
@@ -33,6 +37,12 @@ export function BetsContainer({ isAllBetsDisabled }: BetsContainerProps) {
     return data
   }, [selectedDate])
 
+  const guesses = useAsyncRetry(async () => {
+    const { data }: GuessesData = await api.get(`/guesses?userId=${userId}`)
+
+    return data
+  }, [userId])
+
   function prevDay() {
     const prevDate = subDays(selectedDate, 1)
     setGoNextDay(false)
@@ -47,6 +57,12 @@ export function BetsContainer({ isAllBetsDisabled }: BetsContainerProps) {
     setSelectedDate(nextDate)
   }
 
+  const isDataLoading = matches.loading || guesses.loading
+
+  const isDataError = matches.error || guesses.error
+
+  const isDataLoaded = !matches.loading
+
   return (
     <>
       <DatePicker
@@ -56,29 +72,34 @@ export function BetsContainer({ isAllBetsDisabled }: BetsContainerProps) {
       />
 
       <section className="w-full flex flex-col items-center gap-5">
-        {matches.loading && (
+        {isDataLoading && (
           <ThreeDots
-            height="30"
-            width="30"
-            radius="9"
+            height="50"
+            width="50"
             color="#AF053F"
             ariaLabel="three-dots-loading"
-            wrapperStyle={{}}
             visible={true}
           />
         )}
 
-        {matches.error && <span>Oops! Algo deu errado...</span>}
+        {isDataError && <span>Oops! Algo deu errado...</span>}
 
-        {!matches.error &&
-          !matches.loading &&
-          matches.value?.map((match) => (
-            <BetCard
-              key={match.id}
-              match={match}
-              isAllBetsDisabled={isAllBetsDisabled}
-            />
-          ))}
+        {isDataLoaded &&
+          matches.value?.map((match) => {
+            const guess = guesses.value?.find(
+              (guess) => guess.matchId === match.id
+            )
+
+            return (
+              <BetCard
+                refetchGuesses={async () => guesses.retry()}
+                guess={guess}
+                key={match.id}
+                match={match}
+                isAllBetsDisabled={isAllBetsDisabled}
+              />
+            )
+          })}
       </section>
     </>
   )

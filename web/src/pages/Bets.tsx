@@ -24,7 +24,10 @@ export function Bets() {
           Seus palpites
         </h2>
 
-        <BetsContainer isAllBetsDisabled />
+        <BetsContainer
+          userId="8eb08267-3398-471a-9d26-9c42e70e422a"
+          isAllBetsDisabled
+        />
       </main>
 
       <Footer />

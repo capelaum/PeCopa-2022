@@ -14,7 +14,7 @@ export function TeamCard({ team }: TeamCardProps) {
 
   return (
     <div className="flex flex-col justify-between items-center gap-2">
-      <span className="text-gray-700 uppercase">{team.slug}</span>
+      <span className="text-gray-700 font-bold uppercase">{team.slug}</span>
       <img
         src={teamImgPath}
         alt={`Bandeira de ${name}`}
