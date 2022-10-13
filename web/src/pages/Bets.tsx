@@ -24,7 +24,7 @@ export function Bets() {
           Seus palpites
         </h2>
 
-        <BetsContainer />
+        <BetsContainer isAllBetsDisabled />
       </main>
 
       <Footer />

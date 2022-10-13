@@ -6,15 +6,17 @@ import { useState } from 'react'
 
 interface BetCardProps {
   match: Match
+  isAllBetsDisabled?: boolean
 }
 
-export function BetCard({ match }: BetCardProps) {
+export function BetCard({ match, isAllBetsDisabled }: BetCardProps) {
   const { matchTime, homeTeam, awayTeam, group, round } = match
   const isBetDisabled =
     new Date(matchTime) < new Date() ||
     new Date(matchTime) > new Date(2022, 11, 18) ||
     homeTeam.slug === '?' ||
-    awayTeam.slug === '?'
+    awayTeam.slug === '?' ||
+    isAllBetsDisabled
 
   const [homeTeamScore, setHomeTeamScore] = useState<number | null>(null)
   const [awayTeamScore, setAwayTeamScore] = useState<number | null>(null)
@@ -76,7 +78,7 @@ export function BetCard({ match }: BetCardProps) {
           <span className="text-red-500 font-bold text-sm md:text-base">X</span>
 
           <BetScore
-            isBetDisabled={isBetDisabled}
+            isBetDisabled={isBetDisabled || isAllBetsDisabled}
             score={awayTeamScore}
             setScore={handleSetAwayTeamScore}
           />

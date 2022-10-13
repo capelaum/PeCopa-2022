@@ -7,7 +7,11 @@ import { useAsync } from 'react-use'
 import { BetCard } from '../BetCard'
 import { DatePicker } from '../DatePicker'
 
-export function BetsContainer() {
+interface BetsContainerProps {
+  isAllBetsDisabled?: boolean
+}
+
+export function BetsContainer({ isAllBetsDisabled }: BetsContainerProps) {
   const [selectedDate, setSelectedDate] = useState(new Date(2022, 10, 20))
   const [isGoNextDay, setGoNextDay] = useState(true)
 
@@ -69,7 +73,11 @@ export function BetsContainer() {
         {!matches.error &&
           !matches.loading &&
           matches.value?.map((match) => (
-            <BetCard key={match.id} match={match} />
+            <BetCard
+              key={match.id}
+              match={match}
+              isAllBetsDisabled={isAllBetsDisabled}
+            />
           ))}
       </section>
     </>

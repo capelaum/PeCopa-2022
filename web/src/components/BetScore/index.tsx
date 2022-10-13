@@ -2,7 +2,7 @@ import { TbChevronDown, TbChevronUp } from 'react-icons/tb'
 
 interface BetScoreProps {
   score: number | null
-  isBetDisabled: boolean
+  isBetDisabled?: boolean
   setScore: (isIncrease: boolean) => void
 }
 
