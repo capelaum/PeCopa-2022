@@ -49,8 +49,8 @@ export const create = async (ctx: RouterContext) => {
   }
 }
 
-const validateCreateGuessRequest = (ctx: RouterContext) => {
-  const { matchId, homeTeamScore, awayTeamScore } = ctx.request.body as NewGuess
+const validateCreateGuessRequest = async (ctx: RouterContext) => {
+  const { matchId } = ctx.request.body as NewGuess
 
   if (!matchId) {
     ctx.status = 400
@@ -61,6 +61,20 @@ const validateCreateGuessRequest = (ctx: RouterContext) => {
 
     return false
   }
+
+  if (!validateTeamsScores(ctx)) {
+    return false
+  }
+
+  if (!validateMatchExistsAndIsNotFinished(ctx)) {
+    return false
+  }
+
+  return true
+}
+
+const validateTeamsScores = (ctx: RouterContext) => {
+  const { homeTeamScore, awayTeamScore } = ctx.request.body as NewGuess
 
   if (
     typeof homeTeamScore !== 'number' ||
@@ -80,8 +94,36 @@ const validateCreateGuessRequest = (ctx: RouterContext) => {
 
     return false
   }
+}
 
-  return true
+const validateMatchExistsAndIsNotFinished = async (ctx: RouterContext) => {
+  const { matchId } = ctx.request.body as NewGuess
+
+  try {
+    const matchExistsAndIsNotFinished = await prisma.match.findFirst({
+      where: {
+        id: matchId,
+        match_time: {
+          gte: new Date(),
+        },
+      },
+    })
+
+    if (!matchExistsAndIsNotFinished) {
+      ctx.status = 400
+
+      ctx.body = {
+        message: 'Jogo não existe ou já terminou.',
+      }
+
+      return false
+    }
+  } catch (error) {
+    ctx.status = 500
+    ctx.body = { message: (error as Error).message }
+
+    return false
+  }
 }
 
 const verifyToken = (ctx: RouterContext) => {
