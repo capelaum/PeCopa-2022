@@ -4,6 +4,7 @@ import { BsPeopleFill } from 'react-icons/bs'
 import { MdHome, MdPerson } from 'react-icons/md'
 import { TbEdit, TbLogout, TbStars } from 'react-icons/tb'
 import { NavLink } from 'react-router-dom'
+import { toast } from 'react-toastify'
 import { useLocalStorage } from 'react-use'
 
 interface HeaderProps {
@@ -11,12 +12,17 @@ interface HeaderProps {
 }
 
 export function Header({ children }: HeaderProps) {
-  const [auth, setAuth] = useLocalStorage('@pecopa-2022:auth', {} as AuthData)
+  const [auth, setAuth] = useLocalStorage(
+    import.meta.env.VITE_LOCAL_STORAGE_NAME,
+    {} as AuthData
+  )
 
   const logout = () => {
     setAuth({} as AuthData)
 
     window.location.reload()
+
+    toast.error('Você saiu da sua conta com sucesso!')
   }
 
   return (

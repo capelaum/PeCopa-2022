@@ -38,7 +38,10 @@ export function BetCard({
     isAllBetsDisabled ||
     !!guess
 
-  const [auth] = useLocalStorage('@pecopa-2022:auth', {} as AuthData)
+  const [auth] = useLocalStorage(
+    import.meta.env.VITE_LOCAL_STORAGE_NAME,
+    {} as AuthData
+  )
 
   const handleSetHomeTeamScore = (isIncrease = true) => {
     setHomeTeamScore((score) => {

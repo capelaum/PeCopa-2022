@@ -10,7 +10,7 @@ export const register = async (values: RegisterFormValues) => {
 
     const { data } = response
 
-    toast.success(data.message)
+    toast.success(`${data.message} Comece a fazer seus palpites!`)
 
     return data
   } catch (error) {

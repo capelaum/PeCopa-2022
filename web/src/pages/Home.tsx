@@ -3,7 +3,10 @@ import { Navigate, NavLink } from 'react-router-dom'
 import { useLocalStorage } from 'react-use'
 
 export function Home() {
-  const [auth] = useLocalStorage('@pecopa-2022:auth', {} as AuthData)
+  const [auth] = useLocalStorage(
+    import.meta.env.VITE_LOCAL_STORAGE_NAME,
+    {} as AuthData
+  )
 
   if (auth?.user?.id) {
     return <Navigate to="/palpites" replace />

@@ -10,7 +10,10 @@ import { Navigate, NavLink } from 'react-router-dom'
 import { useLocalStorage } from 'react-use'
 
 export function Register() {
-  const [auth, setAuth] = useLocalStorage('@pecopa-2022:auth', {} as AuthData)
+  const [auth, setAuth] = useLocalStorage(
+    import.meta.env.VITE_LOCAL_STORAGE_NAME,
+    {} as AuthData
+  )
 
   const formik = useFormik({
     onSubmit: (values) => handleRegister(values),
