@@ -1,9 +1,10 @@
-<div align="center">
-  <h1>PeCopa 2022</h1>
-  <h3>Aplicação para realizar palpites ou apostas de placares dos jogos da Copa do Mundo de 2022 no Catar.</h3>
-  <br />
-  <img src=".github/Capa.png" alt="Imagem de capa do porjeto bolao da copa 2022." />
-</div>
+# ![Bola de futebol](.github/ball.png) PeCopa 2022 ![HBola de futebol](.github/ball.png)
+
+![Capa do projeto PeCopa 2022](.github/Capa.png)
+
+## Descrição
+
+Aplicação para realizar palpites ou apostas de placares dos jogos da Copa do Mundo de 2022 no Catar.
 
 ## Funcionalidades
 
@@ -13,6 +14,8 @@
 - [x] Compartilhar palpites
 - [x] Fase de Grupos
 - [x] Fase de Mata-mata
+- [x] Compartilhamento de palpites
+- [x] Listagem de jogadores
 
 ## [Layout Figma][figma]
 

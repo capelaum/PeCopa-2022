@@ -14,7 +14,7 @@ export const validateCreateUserRequest = (ctx: RouterContext) => {
     return false
   }
 
-  if (password.length < 8) {
+  if (password.length < 8 || password.length > 255) {
     ctx.status = 400
 
     ctx.body = {

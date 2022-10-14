@@ -43,7 +43,7 @@ export function Header({ children }: HeaderProps) {
               </NavLink>
 
               <NavLink to="/lista" title="Listagem de jogadores">
-                <BsPeopleFill size={24} color="#F4F6FF" />
+                <BsPeopleFill size={28} color="#F4F6FF" />
               </NavLink>
 
               <NavLink to="/perfil" title="Editar perfil">
@@ -51,7 +51,7 @@ export function Header({ children }: HeaderProps) {
               </NavLink>
 
               <button title="Sair da conta." onClick={logout}>
-                <TbLogout size={32} color="#F4F6FF" />
+                <TbLogout size={28} color="#F4F6FF" />
               </button>
             </div>
           ) : (

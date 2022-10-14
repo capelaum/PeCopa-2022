@@ -6,6 +6,7 @@ import { createUser } from './app/users/useCases/createUser'
 import { getUser } from './app/users/useCases/getUser'
 import { listUsers } from './app/users/useCases/listUsers'
 import { login } from './app/users/useCases/login'
+import { updateUser } from './app/users/useCases/updateUser'
 
 export const router = new Router()
 
@@ -14,6 +15,7 @@ router.get('/login', login)
 router.get('/users', listUsers)
 router.post('/users', createUser)
 router.get('/users/:username', getUser)
+router.put('/users', updateUser)
 
 router.post('/guesses', createGuess)
 router.get('/guesses/:username', listGuesses)
