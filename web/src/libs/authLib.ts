@@ -1,12 +1,12 @@
 import { LoginFormValues, RegisterFormValues } from '@/@types/form'
-import { ResponseData } from '@/@types/response'
+import { AuthResponseData } from '@/@types/response'
 import { api } from '@/services/api'
 import { Buffer } from 'buffer'
 import { toast } from 'react-toastify'
 
 export const register = async (values: RegisterFormValues) => {
   try {
-    const response: ResponseData = await api.post('/users', values)
+    const response: AuthResponseData = await api.post('/users', values)
 
     const { data } = response
 
@@ -24,7 +24,7 @@ export const login = async (values: LoginFormValues) => {
       `${values.email}:${values.password}`
     ).toString('base64')
 
-    const response: ResponseData = await api.get('/login', {
+    const response: AuthResponseData = await api.get('/login', {
       headers: {
         Authorization: `Basic ${encodedAuth}`,
       },

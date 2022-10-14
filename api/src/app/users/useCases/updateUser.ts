@@ -18,7 +18,10 @@ export const updateUser = async (ctx: RouterContext) => {
     return
   }
 
-  if (passwordRequest.length < 8 || passwordRequest.length > 255) {
+  if (
+    (passwordRequest && passwordRequest.length < 8) ||
+    passwordRequest.length > 255
+  ) {
     ctx.status = 400
 
     ctx.body = {
@@ -38,6 +41,20 @@ export const updateUser = async (ctx: RouterContext) => {
     if (!findUser) {
       ctx.status = 404
       ctx.body = { message: 'Usuário não encontrado.' }
+      return
+    }
+
+    const findUserWithSameUsernameOrEmail = await prisma.user.findFirst({
+      where: {
+        OR: [{ username }, { email }],
+      },
+    })
+
+    if (findUserWithSameUsernameOrEmail) {
+      ctx.status = 400
+      ctx.body = {
+        message: 'Já existe um usuário com esse nome de usuário ou e-mail.',
+      }
       return
     }
 

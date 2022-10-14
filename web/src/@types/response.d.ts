@@ -2,7 +2,7 @@ import { Guess } from './guess'
 import { Match } from './match'
 import { User } from './user'
 
-export type ResponseData = {
+export type AuthResponseData = {
   data: AuthData
 }
 
@@ -10,6 +10,13 @@ export type AuthData = {
   message: string
   user: User
   token: string
+}
+
+export type UpdateProfileResponse = {
+  data: {
+    message: string
+    user: User
+  }
 }
 
 export type MatchesData = {

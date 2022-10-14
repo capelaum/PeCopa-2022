@@ -14,8 +14,8 @@ router.get('/login', login)
 
 router.get('/users', listUsers)
 router.post('/users', createUser)
-router.get('/users/:username', getUser)
 router.put('/users', updateUser)
+router.get('/users/:username', getUser)
 
 router.post('/guesses', createGuess)
 router.get('/guesses/:username', listGuesses)

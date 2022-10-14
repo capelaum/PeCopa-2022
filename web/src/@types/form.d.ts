@@ -6,3 +6,10 @@ export type RegisterFormValues = {
 }
 
 export type LoginFormValues = Omit<RegisterFormValues, 'name' | 'username'>
+
+export type UpdateProfileFormValues = {
+  name: string
+  username: string
+  email: string
+  password?: string
+}
