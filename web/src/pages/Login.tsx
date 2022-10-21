@@ -7,7 +7,6 @@ import { useFormik } from 'formik'
 import { MdArrowBack } from 'react-icons/md'
 import { ThreeDots } from 'react-loader-spinner'
 import { Navigate, NavLink } from 'react-router-dom'
-import { toast } from 'react-toastify'
 import { useLocalStorage } from 'react-use'
 
 export function Login() {
@@ -29,7 +28,6 @@ export function Login() {
     const data = await login(values)
 
     if (!data) {
-      toast.error('Ocorreu um erro ao fazer login. Verifique seus dados.')
       return
     }
 

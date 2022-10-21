@@ -29,7 +29,7 @@ export function Bets() {
         <section className="text-white w-full flex gap-4 items-center">
           {isValidUser && (
             <div className="flex flex-col gap-2 items-start">
-              <span className="font-bold">Compartilhe seus palpites!</span>
+              <span className="font-bold">Compartilhe os palpites!</span>
               <button
                 onClick={() => {
                   copyToClipboard(link)
