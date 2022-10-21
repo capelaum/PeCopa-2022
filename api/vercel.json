@@ -2,7 +2,10 @@
   "rewrites": [
     {
       "source": "/(.*)",
-      "destination": "/api/server.ts"
+      "destination": "/src/server.ts",
+      "run": {
+        "use": "@now/node@canary"
+      }
     }
   ]
 }
