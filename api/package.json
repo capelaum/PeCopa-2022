@@ -5,7 +5,7 @@
   "license": "MIT",
   "module": "node",
   "scripts": {
-    "dev": "ts-node-dev --exit-child --transpile-only --ignore-watch node_modules -r dotenv-safe/config src/index.ts"
+    "dev": "ts-node-dev --exit-child --transpile-only --ignore-watch node_modules -r dotenv-safe/config src/server.ts"
   },
   "prisma": {
     "seed": "ts-node prisma/seed.ts"
