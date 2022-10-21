@@ -82,5 +82,3 @@ export const login = async (ctx: RouterContext) => {
     ctx.body = { message: (error as Error).message }
   }
 }
-
-const getUserTokenData = (ctx: RouterContext) => {}

@@ -13,9 +13,7 @@ interface HeaderProps {
 
 export function Header({ children }: HeaderProps) {
   const [currentPath, setCurrentPath] = useState('')
-  console.log('🚀 ~ currentPath', currentPath)
   const location = useLocation()
-  console.log(location.pathname)
 
   const [auth, setAuth] = useLocalStorage(
     import.meta.env.VITE_LOCAL_STORAGE_NAME,
