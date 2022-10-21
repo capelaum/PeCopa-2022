@@ -3,7 +3,6 @@ import { hash } from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import { NewUser } from '../../../@types/users'
 import { prisma } from '../../../database/prismaClient'
-import { validateCreateUserRequest } from '../validations/createUserValidations'
 
 export const createUser = async (ctx: RouterContext) => {
   const {
@@ -13,7 +12,23 @@ export const createUser = async (ctx: RouterContext) => {
     password: passwordRequest,
   } = ctx.request.body as NewUser
 
-  if (!validateCreateUserRequest(ctx)) {
+  if (!name || !username || !email || !passwordRequest) {
+    ctx.status = 400
+
+    ctx.body = {
+      message: 'Dados inválidos.',
+    }
+
+    return
+  }
+
+  if (passwordRequest.length < 8 || passwordRequest.length > 255) {
+    ctx.status = 400
+
+    ctx.body = {
+      message: 'A senha deve ter no mínimo 8 caracteres.',
+    }
+
     return
   }
 
