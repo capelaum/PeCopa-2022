@@ -1,5 +1,5 @@
 import { UpdateProfileFormValues } from '@/@types/form'
-import { UpdateProfileResponse } from '@/@types/response'
+import { UpdateProfileResponse, UsersData } from '@/@types/response'
 import { api } from '@/services/api'
 import { toast } from 'react-toastify'
 
@@ -16,13 +16,21 @@ export const updateUser = async (
 
     const { data } = response
 
-    toast.success(`${data.message} Comece a fazer seus palpites!`)
-
-    console.log('🚀 ~ data', data)
+    toast.success(data.message)
 
     return data
   } catch (error) {
     console.log('🚀 ~ error', error)
     toast.error((error as any).response.data.message)
+  }
+}
+
+export const getUsers = async () => {
+  try {
+    const { data }: UsersData = await api.get('/users')
+
+    return data
+  } catch (error) {
+    console.log('🚀 ~ error', error)
   }
 }

@@ -1,7 +1,6 @@
-import { UsersData } from '@/@types/response'
 import { Footer } from '@/components/Footer'
 import { Header } from '@/components/Header'
-import { api } from '@/services/api'
+import { getUsers } from '@/libs/userLib'
 import { BsFillEyeFill } from 'react-icons/bs'
 import { ThreeDots } from 'react-loader-spinner'
 import { NavLink } from 'react-router-dom'
@@ -9,12 +8,10 @@ import { useAsync } from 'react-use'
 
 export function List() {
   const users = useAsync(async () => {
-    const { data }: UsersData = await api.get(`/users`)
+    const usersData = await getUsers()
 
-    return data
+    return usersData
   }, [])
-
-  console.log('🚀 ~ users', users)
 
   return (
     <div className="min-h-screen bg-white flex flex-col items-center">

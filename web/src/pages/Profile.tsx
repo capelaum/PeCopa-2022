@@ -1,3 +1,4 @@
+import { UpdateProfileFormValues } from '@/@types/form'
 import { AuthData } from '@/@types/response'
 import { Footer } from '@/components/Footer'
 import { Header } from '@/components/Header'
@@ -10,13 +11,13 @@ import { Navigate } from 'react-router-dom'
 import { useLocalStorage } from 'react-use'
 
 export function Profile() {
-  const [auth] = useLocalStorage(
+  const [auth, setAuth] = useLocalStorage(
     import.meta.env.VITE_LOCAL_STORAGE_NAME,
     {} as AuthData
   )
 
   const formik = useFormik({
-    onSubmit: (values) => updateUser(values, auth?.token ?? ''),
+    onSubmit: (values) => handleUpdateUser(values),
     initialValues: {
       name: auth?.user?.name ?? '',
       username: auth?.user?.username ?? '',
@@ -25,6 +26,29 @@ export function Profile() {
     },
     validationSchema: updateProfileValidationSchema,
   })
+
+  const handleUpdateUser = async (values: UpdateProfileFormValues) => {
+    if (!auth?.token) {
+      return
+    }
+
+    const { token } = auth
+
+    const response = await updateUser(values, token)
+
+    if (!response) {
+      return
+    }
+
+    const { user } = response
+
+    setAuth({
+      token,
+      user,
+    })
+
+    formik.resetForm()
+  }
 
   if (!auth?.user?.id) {
     return <Navigate to="/" replace />

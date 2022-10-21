@@ -52,7 +52,7 @@ export const login = async (ctx: RouterContext) => {
     ctx.body = {
       token,
       user: userWithoutPassword,
-      message: 'Login realizado com sucesso.',
+      message: 'Login realizado com sucesso!',
     }
   } catch (error) {
     ctx.status = 500

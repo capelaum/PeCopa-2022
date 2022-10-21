@@ -12,6 +12,8 @@ export const updateUser = async (ctx: RouterContext) => {
     password: passwordRequest,
   } = ctx.request.body as User
 
+  const isPasswordChanged = passwordRequest.length > 0
+
   const userId = verifyToken(ctx)
 
   if (!userId) {
@@ -19,7 +21,7 @@ export const updateUser = async (ctx: RouterContext) => {
   }
 
   if (
-    (passwordRequest && passwordRequest.length < 8) ||
+    (isPasswordChanged && passwordRequest.length < 8) ||
     passwordRequest.length > 255
   ) {
     ctx.status = 400
@@ -50,7 +52,11 @@ export const updateUser = async (ctx: RouterContext) => {
       },
     })
 
-    if (findUserWithSameUsernameOrEmail) {
+    if (
+      findUserWithSameUsernameOrEmail &&
+      username !== findUser.username &&
+      email !== findUser.email
+    ) {
       ctx.status = 400
       ctx.body = {
         message: 'Já existe um usuário com esse nome de usuário ou e-mail.',
@@ -66,7 +72,7 @@ export const updateUser = async (ctx: RouterContext) => {
         username,
         name,
         email,
-        password: passwordRequest
+        password: isPasswordChanged
           ? await hash(passwordRequest, 10)
           : findUser.password,
       },

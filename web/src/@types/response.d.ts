@@ -7,7 +7,7 @@ export type AuthResponseData = {
 }
 
 export type AuthData = {
-  message: string
+  message?: string
   user: User
   token: string
 }
