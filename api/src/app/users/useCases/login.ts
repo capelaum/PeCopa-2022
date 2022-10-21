@@ -4,36 +4,13 @@ import jwt from 'jsonwebtoken'
 import { prisma } from '../../../database/prismaClient'
 
 export const login = async (ctx: RouterContext) => {
-  if (!ctx.headers.authorization) {
-    ctx.status = 401
-    ctx.body = {
-      message: 'Não autorizado.',
-    }
+  const userTokenData = getUserTokenData(ctx)
+
+  if (!userTokenData) {
     return
   }
 
-  let email = ''
-  let plainTextPassword = ''
-
-  try {
-    const [type, accessToken] = ctx.headers.authorization.split(' ')
-    const decodedToken = Buffer.from(accessToken, 'base64').toString('ascii')
-    const [email, plainTextPassword] = decodedToken.split(':')
-
-    if (!email || !plainTextPassword) {
-      ctx.status = 401
-      ctx.body = {
-        message: 'Não autorizado.',
-      }
-      return
-    }
-  } catch (error) {
-    ctx.status = 401
-    ctx.body = {
-      message: 'Não autorizado.',
-    }
-    return
-  }
+  const { email, plainTextPassword } = userTokenData
 
   try {
     const user = await prisma.user.findFirst({
@@ -80,5 +57,37 @@ export const login = async (ctx: RouterContext) => {
   } catch (error) {
     ctx.status = 500
     ctx.body = { message: (error as Error).message }
+  }
+}
+
+const getUserTokenData = (ctx: RouterContext) => {
+  if (!ctx.headers.authorization) {
+    ctx.status = 401
+    ctx.body = {
+      message: 'Não autorizado.',
+    }
+    return
+  }
+
+  try {
+    const [type, accessToken] = ctx.headers.authorization.split(' ')
+    const decodedToken = Buffer.from(accessToken, 'base64').toString('ascii')
+    const [email, plainTextPassword] = decodedToken.split(':')
+
+    if (!email || !plainTextPassword) {
+      ctx.status = 401
+      ctx.body = {
+        message: 'Não autorizado.',
+      }
+      return
+    }
+
+    return { email, plainTextPassword }
+  } catch (error) {
+    ctx.status = 401
+    ctx.body = {
+      message: 'Não autorizado.',
+    }
+    return
   }
 }

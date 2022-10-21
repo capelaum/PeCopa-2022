@@ -3,8 +3,8 @@ import { NewGuess } from '../../../@types/guesses'
 import { prisma } from '../../../database/prismaClient'
 import { verifyToken } from '../../auth/tokenValidation'
 
-export const createGuess = async (ctx: RouterContext) => {
-  const { matchId, homeTeamScore, awayTeamScore } = ctx.request.body as NewGuess
+export const validateCreateGuessRequest = async (ctx: RouterContext) => {
+  const { matchId } = ctx.request.body as NewGuess
 
   if (!matchId) {
     ctx.status = 400
@@ -13,8 +13,36 @@ export const createGuess = async (ctx: RouterContext) => {
       message: 'Dados inválidos.',
     }
 
-    return
+    return false
   }
+
+  if (!validateTeamsScores(ctx)) {
+    return false
+  }
+
+  const isValidMatch = await validateMatchExistsAndIsNotFinished(ctx)
+
+  if (!isValidMatch) {
+    return false
+  }
+
+  const userId = verifyToken(ctx)
+
+  if (!userId) {
+    return false
+  }
+
+  const isGuessAlreadyNotCreated = await validateGuessDoesNotExists(ctx, userId)
+
+  if (!isGuessAlreadyNotCreated) {
+    return false
+  }
+
+  return userId
+}
+
+const validateTeamsScores = (ctx: RouterContext) => {
+  const { homeTeamScore, awayTeamScore } = ctx.request.body as NewGuess
 
   if (
     typeof homeTeamScore !== 'number' ||
@@ -32,8 +60,14 @@ export const createGuess = async (ctx: RouterContext) => {
       message: 'Scores inválidos.',
     }
 
-    return
+    return false
   }
+
+  return true
+}
+
+const validateMatchExistsAndIsNotFinished = async (ctx: RouterContext) => {
+  const { matchId } = ctx.request.body as NewGuess
 
   try {
     const matchExistsAndIsNotFinished = await prisma.match.findFirst({
@@ -55,22 +89,24 @@ export const createGuess = async (ctx: RouterContext) => {
         message: 'Aposta inválida! Partida não encontrada ou já finalizada.',
       }
 
-      return
+      return false
     }
+
+    return true
   } catch (error) {
     ctx.status = 500
     ctx.body = { message: (error as Error).message }
 
-    return
+    return false
   }
+}
 
-  const userId = verifyToken(ctx)
+export const validateGuessDoesNotExists = async (
+  ctx: RouterContext,
+  userId: string
+) => {
+  const { matchId } = ctx.request.body as NewGuess
 
-  if (!userId) {
-    return
-  }
-
-  // validateGuessDoesNotExists
   try {
     const guessExists = await prisma.guess.findFirst({
       where: {
@@ -84,39 +120,13 @@ export const createGuess = async (ctx: RouterContext) => {
       ctx.body = {
         message: 'Você já fez uma palpite para esse jogo.',
       }
-      return
+      return false
     }
+
+    return true
   } catch (error) {
     ctx.status = 500
     ctx.body = { message: (error as Error).message }
-    return
-  }
-
-  try {
-    const guess = await prisma.guess.create({
-      data: {
-        match_id: matchId,
-        user_id: userId,
-        home_team_score: homeTeamScore,
-        away_team_score: awayTeamScore,
-      },
-    })
-
-    ctx.status = 201
-    ctx.body = {
-      message: 'Aposta realizada com sucesso!',
-      guess: {
-        id: guess.id,
-        matchId: guess.match_id,
-        userId: guess.user_id,
-        homeTeamScore: guess.home_team_score,
-        awayTeamScore: guess.away_team_score,
-        createdAt: guess.created_at,
-        updatedAt: guess.updated_at,
-      },
-    }
-  } catch (error) {
-    ctx.status = 500
-    ctx.body = { message: (error as Error).message }
+    return false
   }
 }
