@@ -48,7 +48,7 @@ export function Bets() {
 
       <main className="max-w-[712px] w-full flex flex-col items-center gap-8 my-8 px-5 flex-1">
         <h2 className="w-full text-red-500 font-bold text-xl sm:text-2xl">
-          Palpites de {isValidUser ? user.value.username : '🥲'}
+          {isValidUser ? `Palpites de ${user.value.username}` : ''}
         </h2>
 
         {user.loading && (
@@ -64,6 +64,9 @@ export function Bets() {
         {user.error && (
           <span className="font-bold text-lg text-red-500">
             Oops! Algo deu errado, usuário não encontrado 🥲
+            <a href="/lista" className="button button-primary mt-8">
+              Voltar para lista de jogadores.
+            </a>
           </span>
         )}
 

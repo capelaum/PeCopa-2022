@@ -9,9 +9,10 @@ body {
 .button {
   @apply text-lg md:text-xl font-bold
   flex items-center justify-center
-  px-5 py-3 md:px-6 md:py-4
+  px-5 py-3 md:px-6 md:py-4 text-center
   rounded-2xl
   transition duration-300
+  hover:cursor-pointer
   disabled:opacity-80 disabled:cursor-not-allowed;
 }
 
@@ -77,4 +78,13 @@ td {
   @apply text-red-700 bg-gray-200 p-4 m-0 text-base text-left leading-5
     first:rounded-bl-lg first:pl-8 last:rounded-br-lg last:pr-8
     border-t-4 border-t-white;
+}
+
+.header-link {
+  @apply border-b-[3px] border-b-transparent pb-4
+  hover:border-b-white;
+}
+
+.header-link-active {
+  @apply border-b-[3px] border-white;
 }
