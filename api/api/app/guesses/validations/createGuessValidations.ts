@@ -1,9 +1,4 @@
-import { RouterContext } from '@koa/router'
-import { NewGuess } from '../../../@types/guesses'
-import { prisma } from '../../../database/prismaClient'
-import { verifyToken } from '../../auth/tokenValidation'
-
-export const validateCreateGuessRequest = async (ctx: RouterContext) => {
+/* export const validateCreateGuessRequest = async (ctx: RouterContext) => {
   const { matchId, homeTeamScore, awayTeamScore } = ctx.request.body as NewGuess
 
   if (!matchId) {
@@ -93,7 +88,7 @@ export const validateCreateGuessRequest = async (ctx: RouterContext) => {
   }
 
   return userId
-}
+} */
 
 // const validateTeamsScores = (ctx: RouterContext) => {
 //   const { homeTeamScore, awayTeamScore } = ctx.request.body as NewGuess
