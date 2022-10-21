@@ -1,30 +1,14 @@
 import { RouterContext } from '@koa/router'
 import { NewGuess } from '../../../@types/guesses'
 import { prisma } from '../../../database/prismaClient'
-import { verifyToken } from '../../auth/tokenValidation'
-import {
-  validateCreateGuessRequest,
-  validateGuessDoesNotExists,
-} from '../validations/createGuessValidations'
+import { validateCreateGuessRequest } from '../validations/createGuessValidations'
 
 export const createGuess = async (ctx: RouterContext) => {
   const { matchId, homeTeamScore, awayTeamScore } = ctx.request.body as NewGuess
 
-  const isValidCreateGuessRequest = await validateCreateGuessRequest(ctx)
-
-  if (!isValidCreateGuessRequest) {
-    return
-  }
-
-  const userId = verifyToken(ctx)
+  const userId = await validateCreateGuessRequest(ctx)
 
   if (!userId) {
-    return
-  }
-
-  const isGuessAlreadyNotCreated = await validateGuessDoesNotExists(ctx, userId)
-
-  if (!isGuessAlreadyNotCreated) {
     return
   }
 
