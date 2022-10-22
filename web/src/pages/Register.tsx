@@ -22,13 +22,19 @@ export function Register() {
       username: '',
       email: '',
       password: '',
+      confirmPassword: '',
     },
     validationSchema: registerValidationSchema,
   })
 
   const handleRegister = async (values: RegisterFormValues) => {
-    const data = await register(values)
-    setAuth(data)
+    const response = await register(values)
+
+    if (!response) {
+      return
+    }
+
+    formik.resetForm()
   }
 
   if (auth?.user?.id) {
@@ -105,6 +111,22 @@ export function Register() {
               error={formik.touched.password && formik.errors.password}
               placeholder="Digite sua senha"
               value={formik.values.password}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              required
+            />
+          </div>
+
+          <div className="input-container">
+            <Input
+              label="Confirme sua senha"
+              name="confirmPassword"
+              type="password"
+              error={
+                formik.touched.confirmPassword && formik.errors.confirmPassword
+              }
+              placeholder="Digite sua senha"
+              value={formik.values.confirmPassword}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               required

@@ -1,5 +1,5 @@
+import { Game } from '@/@types/game'
 import { Guess } from '@/@types/guess'
-import { Match } from '@/@types/match'
 import { AuthData, NewGuessResponse } from '@/@types/response'
 import { BetScore } from '@/components/BetScore'
 import { TeamCard } from '@/components/TeamCard'
@@ -12,14 +12,14 @@ import { toast } from 'react-toastify'
 import { useLocalStorage } from 'react-use'
 
 interface BetCardProps {
-  match: Match
+  game: Game
   isAllBetsDisabled?: boolean
   guess?: Guess
   refetchGuesses: () => Promise<void>
 }
 
 export function BetCard({
-  match,
+  game,
   isAllBetsDisabled,
   guess,
   refetchGuesses,
@@ -28,11 +28,11 @@ export function BetCard({
   const [awayTeamScore, setAwayTeamScore] = useState<number | null>(null)
   const [isCreatingGuess, setIsCreatingGuess] = useState(false)
 
-  const { matchTime, homeTeam, awayTeam, group, round } = match
+  const { gameTime, homeTeam, awayTeam, group, round } = game
 
   const isBetDisabled =
-    new Date(matchTime) < new Date() ||
-    new Date(matchTime) > new Date(2022, 11, 18) ||
+    new Date(gameTime) < new Date() ||
+    new Date(gameTime) > new Date(2022, 11, 18) ||
     homeTeam.slug === '?' ||
     awayTeam.slug === '?' ||
     isAllBetsDisabled ||
@@ -81,7 +81,7 @@ export function BetCard({
         '/guesses',
         {
           userId: auth?.user.id,
-          matchId: match.id,
+          gameId: game.id,
           homeTeamScore,
           awayTeamScore,
         },
@@ -117,7 +117,7 @@ export function BetCard({
         </h2>
 
         <span className="font-bold text-gray-700 ">
-          {format(new Date(matchTime), 'HH:mm')}
+          {format(new Date(gameTime), 'HH:mm')}
         </span>
       </div>
 
@@ -164,7 +164,7 @@ export function BetCard({
               visible={true}
             />
           ) : (
-            'Apostar'
+            'Fazer palpite'
           )}
         </button>
       )}

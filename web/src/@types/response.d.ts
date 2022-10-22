@@ -1,5 +1,5 @@
+import { Game } from './game'
 import { Guess } from './guess'
-import { Match } from './match'
 import { User } from './user'
 
 export type AuthResponseData = {
@@ -20,7 +20,7 @@ export type UpdateProfileResponse = {
 }
 
 export type MatchesData = {
-  data: Match[]
+  data: Game[]
 }
 
 export type NewGuessResponse = {

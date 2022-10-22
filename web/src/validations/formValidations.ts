@@ -11,6 +11,11 @@ export const registerValidationSchema = yup.object().shape({
     .string()
     .min(8, 'Senha deve ter pelo menos 8 caracteres')
     .required('Digite sua senha.'),
+  confirmPassword: yup
+    .string()
+    .oneOf([yup.ref('password'), null], 'As senhas devem ser iguais.')
+    .min(8, 'Senha deve ter pelo menos 8 caracteres')
+    .required('Confirme sua senha.'),
 })
 
 export const loginValidationSchema = yup.object().shape({

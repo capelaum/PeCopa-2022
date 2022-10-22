@@ -3,12 +3,12 @@ export type Team = {
   name: string
 }
 
-export type Match = {
+export type Game = {
   id: string
   group: string
   round: string
   homeTeam: Team
   awayTeam: Team
 
-  matchTime: string
+  gameTime: string
 }

@@ -1,9 +1,8 @@
 export type Guess = {
   id: string
-  matchId: string
+  gameId: string
   userId: string
   homeTeamScore: number
   awayTeamScore: number
   createdAt: string
-  updatedAt: string
 }

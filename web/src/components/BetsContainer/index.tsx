@@ -1,7 +1,8 @@
-import { GuessesData, MatchesData } from '@/@types/response'
+import { Game } from '@/@types/game'
+import { GuessesData } from '@/@types/response'
 import { api } from '@/services/api'
-import { addDays, subDays } from 'date-fns'
-import { useState } from 'react'
+import { addDays, format, subDays } from 'date-fns'
+import { useEffect, useState } from 'react'
 import { ThreeDots } from 'react-loader-spinner'
 import { useAsync, useAsyncRetry } from 'react-use'
 import { BetCard } from '../BetCard'
@@ -18,24 +19,36 @@ export function BetsContainer({
 }: BetsContainerProps) {
   const [selectedDate, setSelectedDate] = useState(new Date(2022, 10, 20))
   const [isGoNextDay, setGoNextDay] = useState(true)
+  const [allGames, setAllGames] = useState([] as Game[])
+  const [filteredGames, setFilteredGames] = useState([] as Game[])
 
-  const matches = useAsync(async () => {
-    const { data }: MatchesData = await api.get(
-      `/matches?matchTime=${new Date(selectedDate).toISOString()}`
+  // console.log('🚀 ~ allGames', allGames)
+
+  const gamesData = useAsync(async () => {
+    const { data }: { data: Game[] } = await api.get(`/games`)
+
+    setAllGames(data)
+
+    return data
+  })
+
+  useEffect(() => {
+    const filteredGames = allGames.filter((game) =>
+      game.gameTime.includes(format(selectedDate, 'yyyy-MM-dd'))
     )
 
-    if (data.length === 0) {
-      if (isGoNextDay) {
+    if (filteredGames.length === 0) {
+      if (isGoNextDay && selectedDate < new Date(2022, 12, 18)) {
         setSelectedDate(addDays(selectedDate, 1))
       }
 
-      if (!isGoNextDay) {
+      if (!isGoNextDay && selectedDate > new Date(2022, 10, 20)) {
         setSelectedDate(subDays(selectedDate, 1))
       }
     }
 
-    return data
-  }, [selectedDate])
+    setFilteredGames(filteredGames)
+  }, [selectedDate, allGames])
 
   const guesses = useAsyncRetry(async () => {
     const { data }: GuessesData = await api.get(`/guesses/${username}`)
@@ -57,11 +70,11 @@ export function BetsContainer({
     setSelectedDate(nextDate)
   }
 
-  const isDataLoading = matches.loading || guesses.loading
+  const isDataLoading = gamesData.loading || guesses.loading
 
-  const isDataError = matches.error || guesses.error
+  const isDataError = gamesData.error || guesses.error
 
-  const isDataLoaded = !matches.loading
+  const isDataLoaded = !gamesData.loading
 
   return (
     <>
@@ -85,17 +98,17 @@ export function BetsContainer({
         {isDataError && <span>Oops! Algo deu errado...</span>}
 
         {isDataLoaded &&
-          matches.value?.map((match) => {
+          filteredGames?.map((game) => {
             const guess = guesses.value?.find(
-              (guess) => guess.matchId === match.id
+              (guess) => guess.gameId === game.id
             )
 
             return (
               <BetCard
                 refetchGuesses={async () => guesses.retry()}
                 guess={guess}
-                key={match.id}
-                match={match}
+                key={game.id}
+                game={game}
                 isAllBetsDisabled={isAllBetsDisabled}
               />
             )

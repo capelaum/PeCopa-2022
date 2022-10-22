@@ -3,9 +3,13 @@ export type RegisterFormValues = {
   username: string
   email: string
   password: string
+  confirmPassword: string
 }
 
-export type LoginFormValues = Omit<RegisterFormValues, 'name' | 'username'>
+export type LoginFormValues = Omit<
+  RegisterFormValues,
+  'name' | 'username' | 'confirmPassword'
+>
 
 export type UpdateProfileFormValues = {
   name: string
