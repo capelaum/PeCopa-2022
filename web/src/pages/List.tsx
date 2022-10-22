@@ -1,6 +1,6 @@
 import { Footer } from '@/components/Footer'
 import { Header } from '@/components/Header'
-import { getUsers } from '@/libs/userLib'
+import { getUsers } from '@/libs/usersLib/usersApi'
 import { BsFillEyeFill } from 'react-icons/bs'
 import { ThreeDots } from 'react-loader-spinner'
 import { NavLink } from 'react-router-dom'
@@ -48,7 +48,7 @@ export function List() {
                 {users.value?.map((user) => (
                   <tr key={user.id}>
                     <td className="font-bold">{user.username}</td>
-                    <td className="font-bold">{user.totalGuesses}</td>
+                    <td className="font-bold">{user.guessesCount}</td>
                     <td>
                       <NavLink
                         to={`/apostas/${user.username}`}

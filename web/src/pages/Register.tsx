@@ -1,7 +1,6 @@
-import { RegisterFormValues } from '@/@types/form'
-import { AuthData } from '@/@types/response'
 import { Input } from '@/components/Input'
-import { register } from '@/libs/authLib'
+import { register } from '@/libs/authLib/authApi'
+import { Auth, RegisterFormValues } from '@/libs/authLib/authTypes'
 import { registerValidationSchema } from '@/validations/formValidations'
 import { useFormik } from 'formik'
 import { MdArrowBack } from 'react-icons/md'
@@ -12,7 +11,7 @@ import { useLocalStorage } from 'react-use'
 export function Register() {
   const [auth, setAuth] = useLocalStorage(
     import.meta.env.VITE_LOCAL_STORAGE_NAME,
-    {} as AuthData
+    {} as Auth
   )
 
   const formik = useFormik({

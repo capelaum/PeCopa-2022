@@ -1,27 +1,59 @@
-import { UserData } from '@/@types/response'
-import { BetsContainer } from '@/components/BetsContainer'
 import { Footer } from '@/components/Footer'
+import { GamesContainer } from '@/components/GamesContainer'
 import { Header } from '@/components/Header'
-import { api } from '@/services/api'
+import { getGames, getGamesDates } from '@/libs/gamesLib/gamesApi'
+import { Game } from '@/libs/gamesLib/gameTypes'
+import { getUser } from '@/libs/usersLib/usersApi'
+import { User } from '@/libs/usersLib/userTypes'
+import { useQuery } from '@tanstack/react-query'
+import { useState } from 'react'
 import { TbCopy } from 'react-icons/tb'
 import { ThreeDots } from 'react-loader-spinner'
 import { useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
-import { useAsync, useCopyToClipboard } from 'react-use'
+import { useCopyToClipboard } from 'react-use'
 
 export function Bets() {
+  const [user, setUser] = useState<User | null>(null)
+  const [games, setGames] = useState([] as Game[])
+  const [gamesDates, setGamesDates] = useState([] as Date[])
+
   const { username } = useParams()
   const [_, copyToClipboard] = useCopyToClipboard()
 
   const link = `${import.meta.env.VITE_APP_URL}/apostas/${username}`
 
-  const user = useAsync(async () => {
-    const { data }: UserData = await api.get(`/users/${username}`)
+  const { error: fetchUserError, isLoading: fetchUserIsLoading } = useQuery(
+    ['user'],
+    () => getUser(username ?? ''),
+    {
+      onSuccess: (user) => {
+        setUser(user)
+      },
+    }
+  )
 
-    return data
-  }, [username])
+  const { error: fetchGamesError, isLoading: fetchGamesIsLoading } = useQuery(
+    ['games'],
+    () => getGames(username ?? ''),
+    {
+      onSuccess: (games) => {
+        const gamesWithGuesses = games.filter((game) => game.guesses.length > 0)
+        setGames(gamesWithGuesses)
+        setGamesDates(getGamesDates(gamesWithGuesses))
+      },
+    }
+  )
 
-  const isValidUser = !user.loading && !user.error && !!user.value
+  const isFetching = fetchUserIsLoading || fetchGamesIsLoading
+
+  const fetchError = !!fetchUserError || !!fetchGamesError
+
+  const isValidUser = !fetchUserIsLoading && !fetchUserError && user
+
+  const userHasGuesses = games.length > 0
+
+  const userHasNoGuesses = !userHasGuesses && isValidUser && !isFetching
 
   return (
     <div className="min-h-screen bg-white flex flex-col items-center">
@@ -48,10 +80,10 @@ export function Bets() {
 
       <main className="max-w-[712px] w-full flex flex-col items-center gap-8 my-8 px-5 flex-1">
         <h2 className="w-full text-red-500 font-bold text-xl sm:text-2xl">
-          {isValidUser ? `Palpites de ${user.value.username}` : ''}
+          {isValidUser ? `Palpites de ${user.username}` : ''}
         </h2>
 
-        {user.loading && (
+        {isFetching && (
           <ThreeDots
             height="50"
             width="50"
@@ -61,7 +93,7 @@ export function Bets() {
           />
         )}
 
-        {user.error && (
+        {fetchError && (
           <span className="font-bold text-lg text-red-500">
             Oops! Algo deu errado, usuário não encontrado 🥲
             <a href="/lista" className="button button-primary mt-8">
@@ -70,8 +102,16 @@ export function Bets() {
           </span>
         )}
 
-        {isValidUser && (
-          <BetsContainer username={user.value.username} isAllBetsDisabled />
+        {userHasNoGuesses && (
+          <span>Parece que esse jogador ainda não fez palpites... 🥲</span>
+        )}
+
+        {isValidUser && userHasGuesses && (
+          <GamesContainer
+            games={games}
+            gamesDates={gamesDates}
+            isAllBetsDisabled
+          />
         )}
       </main>
 

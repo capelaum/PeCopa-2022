@@ -1,13 +1,16 @@
-import { LoginFormValues, RegisterFormValues } from '@/@types/form'
-import { AuthResponseData } from '@/@types/response'
 import { EmailIcon } from '@/components/Icons/EmailIcon'
 import { api } from '@/services/api'
 import { toast } from 'react-toastify'
+import {
+  LoginFormValues,
+  LoginResponse,
+  RegisterFormValues,
+  RegisterResponse,
+} from './authTypes'
 
 export const register = async (values: RegisterFormValues) => {
   try {
-    const response: AuthResponseData = await api.post('/register', values)
-    console.log('🚀 ~ response', response)
+    const response: RegisterResponse = await api.post('/register', values)
 
     const { data } = response
 
@@ -20,21 +23,22 @@ export const register = async (values: RegisterFormValues) => {
 
     return data
   } catch (error) {
+    console.log('🚀 ~ error', error)
     toast.error((error as any).response.data.message)
   }
 }
 
 export const login = async (values: LoginFormValues) => {
   try {
-    const response: AuthResponseData = await api.post('/login', values)
+    const response: LoginResponse = await api.post('/login', values)
 
     const { data } = response
-    console.log('🚀 ~ data', data)
 
     toast.success(data.message)
 
     return data
   } catch (error) {
+    console.log('🚀 ~ error', error)
     toast.error((error as any).response.data.message)
   }
 }

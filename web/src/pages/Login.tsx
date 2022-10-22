@@ -1,7 +1,6 @@
-import { LoginFormValues } from '@/@types/form'
-import { AuthData } from '@/@types/response'
 import { Input } from '@/components/Input'
-import { login } from '@/libs/authLib'
+import { login } from '@/libs/authLib/authApi'
+import { Auth, LoginFormValues } from '@/libs/authLib/authTypes'
 import { loginValidationSchema } from '@/validations/formValidations'
 import { useFormik } from 'formik'
 import { MdArrowBack } from 'react-icons/md'
@@ -12,7 +11,7 @@ import { useLocalStorage } from 'react-use'
 export function Login() {
   const [auth, setAuth] = useLocalStorage(
     import.meta.env.VITE_LOCAL_STORAGE_NAME,
-    {} as AuthData
+    {} as Auth
   )
 
   const formik = useFormik({

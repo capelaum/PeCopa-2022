@@ -1,38 +1,32 @@
-import { Game } from '@/@types/game'
-import { Guess } from '@/@types/guess'
-import { AuthData, NewGuessResponse } from '@/@types/response'
-import { BetScore } from '@/components/BetScore'
 import { TeamCard } from '@/components/TeamCard'
-import { api } from '@/services/api'
+import { Auth } from '@/libs/authLib/authTypes'
+import { Game } from '@/libs/gamesLib/gameTypes'
+import { createGuess } from '@/libs/guessesLib/guessesApi'
+import { Guess } from '@/libs/guessesLib/guessTypes'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { format } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 import { useState } from 'react'
 import { ThreeDots } from 'react-loader-spinner'
 import { toast } from 'react-toastify'
 import { useLocalStorage } from 'react-use'
+import { GameScore } from '../GameScore'
 
-interface BetCardProps {
+interface GameCardProps {
   game: Game
+  guess: Guess | null
   isAllBetsDisabled?: boolean
-  guess?: Guess
-  refetchGuesses: () => Promise<void>
 }
 
-export function BetCard({
-  game,
-  isAllBetsDisabled,
-  guess,
-  refetchGuesses,
-}: BetCardProps) {
+export function GameCard({ game, guess, isAllBetsDisabled }: GameCardProps) {
   const [homeTeamScore, setHomeTeamScore] = useState<number | null>(null)
   const [awayTeamScore, setAwayTeamScore] = useState<number | null>(null)
   const [isCreatingGuess, setIsCreatingGuess] = useState(false)
 
   const { gameTime, homeTeam, awayTeam, group, round } = game
 
-  const isBetDisabled =
+  const isGameDisabled =
     new Date(gameTime) < new Date() ||
-    new Date(gameTime) > new Date(2022, 11, 18) ||
     homeTeam.slug === '?' ||
     awayTeam.slug === '?' ||
     isAllBetsDisabled ||
@@ -40,8 +34,21 @@ export function BetCard({
 
   const [auth] = useLocalStorage(
     import.meta.env.VITE_LOCAL_STORAGE_NAME,
-    {} as AuthData
+    {} as Auth
   )
+
+  const queryClient = useQueryClient()
+
+  const createGuessMutation = useMutation(createGuess, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['games'])
+      setIsCreatingGuess(false)
+    },
+    onError: () => {
+      toast.error('Ocorreu um erro ao criar o palpite, tente novamente!')
+      setIsCreatingGuess(false)
+    },
+  })
 
   const handleSetHomeTeamScore = (isIncrease = true) => {
     setHomeTeamScore((score) => {
@@ -77,28 +84,21 @@ export function BetCard({
     }
 
     try {
-      const { data: newGuessData }: { data: NewGuessResponse } = await api.post(
-        '/guesses',
-        {
-          userId: auth?.user.id,
-          gameId: game.id,
-          homeTeamScore,
-          awayTeamScore,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${auth?.token}`,
-          },
-        }
-      )
+      const newGuessData = await createGuessMutation.mutateAsync({
+        userId: auth?.user.id ?? '',
+        gameId: game.id,
+        homeTeamScore,
+        awayTeamScore,
+        token: auth?.token ?? '',
+      })
 
-      if (newGuessData) {
-        await refetchGuesses()
+      console.log('🚀 ~ newGuessData', newGuessData)
+
+      if (!newGuessData) {
+        return
       }
 
       toast.success(newGuessData.message)
-
-      setIsCreatingGuess(false)
     } catch (error) {
       toast.error((error as any).response.data.message)
       setIsCreatingGuess(false)
@@ -123,22 +123,22 @@ export function BetCard({
 
       <div
         className={`flex ${
-          isBetDisabled ? 'items-end' : 'items-start'
+          isGameDisabled ? 'items-end' : 'items-start'
         } justify-between gap-4 sm:gap-6`}
       >
         <TeamCard team={homeTeam} />
 
         <div className="flex items-center justify-between gap-2 sm:gap-4">
-          <BetScore
-            isBetDisabled={isBetDisabled}
+          <GameScore
+            isGameDisabled={isGameDisabled}
             score={guess?.homeTeamScore ?? homeTeamScore}
             setScore={handleSetHomeTeamScore}
           />
 
           <span className="text-red-500 font-bold text-sm md:text-base">X</span>
 
-          <BetScore
-            isBetDisabled={isBetDisabled || isAllBetsDisabled}
+          <GameScore
+            isGameDisabled={isGameDisabled || isAllBetsDisabled}
             score={guess?.awayTeamScore ?? awayTeamScore}
             setScore={handleSetAwayTeamScore}
           />
@@ -147,7 +147,7 @@ export function BetCard({
         <TeamCard team={awayTeam} />
       </div>
 
-      {!isBetDisabled && (
+      {!isGameDisabled && (
         <button
           onClick={handleCreateGuess}
           className="button button-primary w-full mt-5"
@@ -170,8 +170,8 @@ export function BetCard({
       )}
 
       {guess && (
-        <span className=" font-bold text-center text-sm text-red-500 mt-5">
-          Aposta feita em{' '}
+        <span className="font-bold text-center text-sm text-red-500 mt-5">
+          Palpite feito em{' '}
           {format(new Date(guess.createdAt), 'dd/MM/y - HH:mm', {
             locale: ptBR,
           })}

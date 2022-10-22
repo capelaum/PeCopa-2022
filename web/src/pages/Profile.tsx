@@ -1,27 +1,34 @@
-import { UpdateProfileFormValues } from '@/@types/form'
-import { AuthData } from '@/@types/response'
 import { Footer } from '@/components/Footer'
 import { Header } from '@/components/Header'
 import { Input } from '@/components/Input'
-import { updateUser } from '@/libs/userLib'
+import { Auth } from '@/libs/authLib/authTypes'
+import { updateUser } from '@/libs/usersLib/usersApi'
+import { UpdateProfileFormValues, User } from '@/libs/usersLib/userTypes'
 import { updateProfileValidationSchema } from '@/validations/formValidations'
 import { useFormik } from 'formik'
+import { useState } from 'react'
 import { ThreeDots } from 'react-loader-spinner'
 import { Navigate } from 'react-router-dom'
 import { useLocalStorage } from 'react-use'
 
 export function Profile() {
+  const [user, setUser] = useState<User | null>(null)
+
   const [auth, setAuth] = useLocalStorage(
     import.meta.env.VITE_LOCAL_STORAGE_NAME,
-    {} as AuthData
+    {} as Auth
   )
+
+  if (auth?.user) {
+    setUser(auth.user)
+  }
 
   const formik = useFormik({
     onSubmit: (values) => handleUpdateUser(values),
     initialValues: {
-      name: auth?.user?.name ?? '',
-      username: auth?.user?.username ?? '',
-      email: auth?.user?.email ?? '',
+      name: user?.name ?? '',
+      username: user?.username ?? '',
+      email: user?.email ?? '',
       password: '',
     },
     validationSchema: updateProfileValidationSchema,
@@ -34,13 +41,11 @@ export function Profile() {
 
     const { token } = auth
 
-    const response = await updateUser(values, token)
+    const user = await updateUser(values, token)
 
-    if (!response) {
+    if (!user) {
       return
     }
-
-    const { user } = response
 
     setAuth({
       token,

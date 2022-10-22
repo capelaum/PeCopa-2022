@@ -9,6 +9,7 @@ export type Game = {
   round: string
   homeTeam: Team
   awayTeam: Team
+  guesses: Guess[]
 
   gameTime: string
 }
