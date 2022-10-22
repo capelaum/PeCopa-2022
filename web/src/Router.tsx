@@ -25,7 +25,7 @@ const router = createBrowserRouter([
     element: <Guesses />,
   },
   {
-    path: '/apostas/:username',
+    path: '/palpites/:username',
     element: <Bets />,
   },
   {

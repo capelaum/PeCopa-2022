@@ -1,11 +1,11 @@
-import { AuthData } from '@/@types/response'
+import { Auth } from '@/libs/authLib/authTypes'
 import { Navigate, NavLink } from 'react-router-dom'
 import { useLocalStorage } from 'react-use'
 
 export function Home() {
   const [auth] = useLocalStorage(
     import.meta.env.VITE_LOCAL_STORAGE_NAME,
-    {} as AuthData
+    {} as Auth
   )
 
   if (auth?.user?.id) {
@@ -56,6 +56,19 @@ export function Home() {
             "
           >
             Fazer login
+          </NavLink>
+
+          <NavLink
+            to="/lista"
+            title="Fazer login"
+            className="
+            button
+            flex items-center justify-center
+          bg-white text-red-700
+            hover:bg-red-500 hover:text-white
+            "
+          >
+            Participantes
           </NavLink>
         </section>
       </main>

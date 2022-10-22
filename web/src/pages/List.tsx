@@ -17,7 +17,7 @@ export function List() {
     <div className="min-h-screen bg-white flex flex-col items-center">
       <Header>
         <h1 className="text-xl sm:text-2xl text-white font-bold">
-          Listagem de jogadores
+          Participantes
         </h1>
       </Header>
 
@@ -39,7 +39,7 @@ export function List() {
             <table className="w-full border-collapse min-w-[400px]">
               <thead>
                 <tr>
-                  <th>Username</th>
+                  <th>Participante</th>
                   <th>Nº Palpites</th>
                   <th>Ver Palpites</th>
                 </tr>
@@ -51,7 +51,7 @@ export function List() {
                     <td className="font-bold">{user.guessesCount}</td>
                     <td>
                       <NavLink
-                        to={`/apostas/${user.username}`}
+                        to={`/palpites/${user.username}`}
                         title={`Ver palpites de ${user.username}`}
                         className="inline-flex items-center justify-center hover:bg-gray-100 p-1 rounded-md"
                       >
