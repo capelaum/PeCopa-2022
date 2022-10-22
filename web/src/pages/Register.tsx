@@ -34,6 +34,8 @@ export function Register() {
     }
 
     formik.resetForm()
+
+    window.location.href = '/login'
   }
 
   if (auth?.user?.id) {

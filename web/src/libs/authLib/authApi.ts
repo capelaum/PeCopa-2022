@@ -23,7 +23,7 @@ export const register = async (values: RegisterFormValues) => {
 
     return data
   } catch (error) {
-    console.log('🚀 ~ error', error)
+    console.error('🚀 ~ error', error)
     toast.error((error as any).response.data.message)
   }
 }
@@ -38,7 +38,7 @@ export const login = async (values: LoginFormValues) => {
 
     return data
   } catch (error) {
-    console.log('🚀 ~ error', error)
+    console.error('🚀 ~ error', error)
     toast.error((error as any).response.data.message)
   }
 }

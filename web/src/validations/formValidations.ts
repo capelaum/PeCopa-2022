@@ -37,4 +37,9 @@ export const updateProfileValidationSchema = yup.object().shape({
     .email('E-mail deve ser válido.')
     .required('Informe seu e-mail.'),
   password: yup.string().min(8, 'Senha deve ter pelo menos 8 caracteres'),
+  confirmPassword: yup
+    .string()
+    .oneOf([yup.ref('password'), null], 'As senhas devem ser iguais.')
+    .min(8, 'Senha deve ter pelo menos 8 caracteres')
+    .required('Confirme sua senha.'),
 })

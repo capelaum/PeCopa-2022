@@ -3,33 +3,28 @@ import { Header } from '@/components/Header'
 import { Input } from '@/components/Input'
 import { Auth } from '@/libs/authLib/authTypes'
 import { updateUser } from '@/libs/usersLib/usersApi'
-import { UpdateProfileFormValues, User } from '@/libs/usersLib/userTypes'
+import { UpdateProfileFormValues } from '@/libs/usersLib/userTypes'
 import { updateProfileValidationSchema } from '@/validations/formValidations'
 import { useFormik } from 'formik'
-import { useState } from 'react'
 import { ThreeDots } from 'react-loader-spinner'
 import { Navigate } from 'react-router-dom'
 import { useLocalStorage } from 'react-use'
 
 export function Profile() {
-  const [user, setUser] = useState<User | null>(null)
-
   const [auth, setAuth] = useLocalStorage(
     import.meta.env.VITE_LOCAL_STORAGE_NAME,
     {} as Auth
   )
-
-  if (auth?.user) {
-    setUser(auth.user)
-  }
+  console.log('🚀 ~ auth', auth)
 
   const formik = useFormik({
     onSubmit: (values) => handleUpdateUser(values),
     initialValues: {
-      name: user?.name ?? '',
-      username: user?.username ?? '',
-      email: user?.email ?? '',
+      name: auth?.user?.name ?? '',
+      username: auth?.user?.username ?? '',
+      email: auth?.user?.email ?? '',
       password: '',
+      confirmPassword: '',
     },
     validationSchema: updateProfileValidationSchema,
   })
@@ -41,7 +36,7 @@ export function Profile() {
 
     const { token } = auth
 
-    const user = await updateUser(values, token)
+    const user = await updateUser(values, auth)
 
     if (!user) {
       return
@@ -128,6 +123,22 @@ export function Profile() {
               value={formik.values.password}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
+            />
+          </div>
+
+          <div className="input-container">
+            <Input
+              label="Confirme sua senha"
+              name="confirmPassword"
+              type="password"
+              error={
+                formik.touched.confirmPassword && formik.errors.confirmPassword
+              }
+              placeholder="Digite sua senha"
+              value={formik.values.confirmPassword}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              required
             />
           </div>
 

@@ -1,3 +1,5 @@
+import { User } from '../usersLib/userTypes'
+
 export type Auth = {
   message?: string
   user: User

@@ -92,8 +92,6 @@ export function GameCard({ game, guess, isAllBetsDisabled }: GameCardProps) {
         token: auth?.token ?? '',
       })
 
-      console.log('🚀 ~ newGuessData', newGuessData)
-
       if (!newGuessData) {
         return
       }

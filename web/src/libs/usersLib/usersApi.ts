@@ -1,5 +1,6 @@
 import { api } from '@/services/api'
 import { toast } from 'react-toastify'
+import { Auth } from '../authLib/authTypes'
 import { UpdateProfileFormValues, User } from './userTypes'
 
 export const getUser = async (username: string) => {
@@ -8,7 +9,7 @@ export const getUser = async (username: string) => {
 
     return data
   } catch (error) {
-    console.log('🚀 ~ error', error)
+    console.error('🚀 ~ error', error)
     return null
   }
 }
@@ -19,20 +20,24 @@ export const getUsers = async () => {
 
     return data
   } catch (error) {
-    console.log('🚀 ~ error', error)
+    console.error('🚀 ~ error', error)
   }
 }
 
 export const updateUser = async (
   values: UpdateProfileFormValues,
-  token: string
+  auth: Auth
 ) => {
   try {
-    const response: { data: User } = await api.put('/users', values, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
+    const response: { data: User } = await api.put(
+      `/users/${auth.user.id}`,
+      values,
+      {
+        headers: {
+          Authorization: `Bearer ${auth.token}`,
+        },
+      }
+    )
 
     const { data } = response
 
@@ -40,7 +45,7 @@ export const updateUser = async (
 
     return data
   } catch (error) {
-    console.log('🚀 ~ error', error)
+    console.error('🚀 ~ error', error)
     toast.error((error as any).response.data.message)
   }
 }
