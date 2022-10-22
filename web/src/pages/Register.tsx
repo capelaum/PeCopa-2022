@@ -3,13 +3,16 @@ import { register } from '@/libs/authLib/authApi'
 import { Auth, RegisterFormValues } from '@/libs/authLib/authTypes'
 import { registerValidationSchema } from '@/validations/formValidations'
 import { useFormik } from 'formik'
+import { useState } from 'react'
 import { MdArrowBack } from 'react-icons/md'
 import { ThreeDots } from 'react-loader-spinner'
 import { Navigate, NavLink } from 'react-router-dom'
 import { useLocalStorage } from 'react-use'
 
 export function Register() {
-  const [auth, setAuth] = useLocalStorage(
+  const [dialogOpen, setdialogOpen] = useState(false)
+
+  const [auth] = useLocalStorage(
     import.meta.env.VITE_LOCAL_STORAGE_NAME,
     {} as Auth
   )
@@ -33,9 +36,7 @@ export function Register() {
       return
     }
 
-    formik.resetForm()
-
-    window.location.href = '/login'
+    setdialogOpen(true)
   }
 
   if (auth?.user?.id) {
@@ -57,6 +58,32 @@ export function Register() {
           </NavLink>
           <h1 className="text-red-700 font-bold text-xl">Crie sua conta</h1>
         </header>
+
+        <dialog
+          id="verify-email-dialog"
+          title="Verifique seu e-mail"
+          className={`dialog ${dialogOpen ? 'flex' : 'hidden'}`}
+        >
+          <p className="text-center text-md">
+            Um email de verificação foi enviado para {formik.values.email}.
+          </p>
+
+          <p className="text-center text-md">
+            Acesse seu email e clique no link para confirmar seu cadastro.
+          </p>
+
+          <button
+            onClick={() => {
+              setdialogOpen(false)
+              formik.resetForm()
+
+              window.location.href = '/login'
+            }}
+            className="text-white bg-red-500 hover:bg-red-300 h-10 mt-6 px-5 py-3 flex items-center justify-center rounded-lg"
+          >
+            Ok
+          </button>
+        </dialog>
 
         <form
           onSubmit={formik.handleSubmit}

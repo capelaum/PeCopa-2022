@@ -1,4 +1,3 @@
-import { EmailIcon } from '@/components/Icons/EmailIcon'
 import { api } from '@/services/api'
 import { toast } from 'react-toastify'
 import {
@@ -15,10 +14,7 @@ export const register = async (values: RegisterFormValues) => {
     const { data } = response
 
     toast.success(
-      `Um email de verificação foi enviado para ${data.user.email}.`,
-      {
-        icon: EmailIcon,
-      }
+      `Um email de verificação foi enviado para ${data.user.email}.`
     )
 
     return data

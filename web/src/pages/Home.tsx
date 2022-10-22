@@ -14,11 +14,11 @@ export function Home() {
 
   return (
     <div className="min-h-screen px-6 py-8 bg-red-700 text-white flex flex-col items-center justify-center">
-      <header className="max-w-[150px] mb-10 md:mb-20">
+      <header className="max-w-[150px] mb-20 md:mb-32">
         <img src="/assets/logo/pecopa_whine.svg" alt="NaTrave Logo" />
       </header>
 
-      <main className="max-w-7xl flex flex-col md:flex-row items-center justify-between gap-6 md:gap-16">
+      <main className="max-w-7xl flex flex-col md:flex-row items-center justify-between gap-12 md:gap-24">
         <div className="max-w-md">
           <img
             src="/assets/imgs/hero_2.png"
@@ -32,19 +32,6 @@ export function Home() {
           </h1>
 
           <NavLink
-            to="/cadastro"
-            title="Criar minha conta"
-            className="
-              button
-              flex items-center justify-center
-            bg-white text-red-700
-              hover:bg-red-500 hover:text-white
-          "
-          >
-            Criar minha conta
-          </NavLink>
-
-          <NavLink
             to="/login"
             title="Fazer login"
             className="
@@ -56,6 +43,19 @@ export function Home() {
             "
           >
             Fazer login
+          </NavLink>
+
+          <NavLink
+            to="/cadastro"
+            title="Criar minha conta"
+            className="
+              button
+              flex items-center justify-center
+            bg-white text-red-700
+              hover:bg-red-500 hover:text-white
+          "
+          >
+            Criar minha conta
           </NavLink>
 
           <NavLink
