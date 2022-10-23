@@ -64,6 +64,16 @@ export function Header({ children }: HeaderProps) {
           />
 
           <div className="flex items-center gap-4 py-4 h-12">
+            {(auth?.user || username) && (
+              <NavLink
+                to={`/palpites/${auth?.user ? auth.user.username : username}`}
+                title="Seus palpites"
+                className={`header-link ${betsActive}`}
+              >
+                <TbStars size={24} color="#F4F6FF" />
+              </NavLink>
+            )}
+
             {auth?.user?.id && (
               <>
                 <NavLink
@@ -100,27 +110,21 @@ export function Header({ children }: HeaderProps) {
               </>
             )}
 
-            {(auth?.user || username) && (
-              <NavLink
-                to={`/palpites/${auth?.user ? auth.user.username : username}`}
-                title="Seus palpites"
-                className={`header-link ${betsActive}`}
-              >
-                <TbStars size={24} color="#F4F6FF" />
-              </NavLink>
+            {!auth?.user?.id && (
+              <>
+                <NavLink
+                  to="/lista"
+                  title="Listagem de jogadores"
+                  className={`header-link ${listActive}`}
+                >
+                  <BsPeopleFill size={28} color="#F4F6FF" />
+                </NavLink>
+
+                <NavLink to="/" title="Home" className="header-link">
+                  <MdHome size={28} color="#F4F6FF" />
+                </NavLink>
+              </>
             )}
-
-            <NavLink
-              to="/lista"
-              title="Listagem de jogadores"
-              className={`header-link ${listActive}`}
-            >
-              <BsPeopleFill size={28} color="#F4F6FF" />
-            </NavLink>
-
-            <NavLink to="/" title="Home" className="header-link">
-              <MdHome size={28} color="#F4F6FF" />
-            </NavLink>
           </div>
         </section>
 
