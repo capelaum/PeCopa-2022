@@ -1,5 +1,7 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import { Bets } from './pages/Bets'
+import { AlreadyVerifiedMail } from './pages/email/AlreadyVerifiedMail'
+import { VerifiedMail } from './pages/email/VerifiedMail'
 import { Guesses } from './pages/Guesses'
 import { Home } from './pages/Home'
 import { List } from './pages/List'
@@ -35,6 +37,14 @@ const router = createBrowserRouter([
   {
     path: '/lista',
     element: <List />,
+  },
+  {
+    path: '/email/verificado',
+    element: <VerifiedMail />,
+  },
+  {
+    path: '/email/ja-verificado',
+    element: <AlreadyVerifiedMail />,
   },
 ])
 

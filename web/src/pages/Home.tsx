@@ -60,7 +60,7 @@ export function Home() {
 
           <NavLink
             to="/lista"
-            title="Fazer login"
+            title="Participantes"
             className="
             button
             flex items-center justify-center
