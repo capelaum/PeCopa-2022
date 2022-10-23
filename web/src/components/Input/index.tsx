@@ -1,13 +1,11 @@
-interface InputProps {
+import { InputHTMLAttributes } from 'react'
+
+interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   label: string
   name: string
-  type?: string
   error?: string | boolean | undefined
-  placeholder: string
-  value: string
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void
   onBlur: (event: React.FocusEvent<HTMLInputElement>) => void
-  required?: boolean
 }
 
 export function Input({
@@ -15,9 +13,6 @@ export function Input({
   label,
   type = 'text',
   error,
-  placeholder,
-  required,
-  value,
   onChange,
   onBlur,
   ...rest
@@ -29,16 +24,17 @@ export function Input({
       </label>
       <input
         {...rest}
-        className={`input ${error && 'border border-red-300'}`}
-        name={name}
         type={type}
-        placeholder={placeholder}
-        required={required}
-        value={value}
+        name={name}
         onChange={onChange}
         onBlur={onBlur}
+        className={`input ${error && 'border border-red-300'}`}
       />
-      <span className="p-2 text-sm text-red-300">{error}</span>
+      <span
+        className={`p-2 text-sm text-red-300 ${error ? 'visible' : 'hidden'}`}
+      >
+        {error}
+      </span>
     </div>
   )
 }

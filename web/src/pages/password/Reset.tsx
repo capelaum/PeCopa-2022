@@ -1,16 +1,18 @@
 import { Input } from '@/components/Input'
-import { register } from '@/libs/authLib/authApi'
-import { Auth, RegisterFormValues } from '@/libs/authLib/authTypes'
-import { registerValidationSchema } from '@/validations/formValidations'
+import { resetPassword } from '@/libs/authLib/authApi'
+import { Auth, ResetPasswordFormValues } from '@/libs/authLib/authTypes'
+import { resetPasswordValidationSchema } from '@/validations/formValidations'
 import { useFormik } from 'formik'
-import { useState } from 'react'
 import { MdArrowBack } from 'react-icons/md'
 import { ThreeDots } from 'react-loader-spinner'
-import { Navigate, NavLink } from 'react-router-dom'
+import { Navigate, NavLink, useSearchParams } from 'react-router-dom'
 import { useLocalStorage } from 'react-use'
 
-export function Register() {
-  const [dialogOpen, setdialogOpen] = useState(false)
+export function Reset() {
+  const [searchParams] = useSearchParams()
+
+  const token = searchParams.get('token')
+  const email = searchParams.get('email')
 
   const [auth] = useLocalStorage(
     import.meta.env.VITE_LOCAL_STORAGE_NAME,
@@ -18,25 +20,30 @@ export function Register() {
   )
 
   const formik = useFormik({
-    onSubmit: (values) => handleRegister(values),
+    onSubmit: (values) => handleResetPassword(values),
     initialValues: {
-      name: '',
-      username: '',
-      email: '',
+      email: email ?? '',
       password: '',
       confirmPassword: '',
+      token: token ?? '',
     },
-    validationSchema: registerValidationSchema,
+    validationSchema: resetPasswordValidationSchema,
   })
 
-  const handleRegister = async (values: RegisterFormValues) => {
-    const response = await register(values)
+  async function handleResetPassword(values: ResetPasswordFormValues) {
+    const result = await resetPassword(values)
+    console.log('🚀 ~ result', result)
 
-    if (!response) {
+    formik.resetForm()
+
+    if (!result) {
       return
     }
 
-    setdialogOpen(true)
+    // redirect to login after 3 seconds
+    setTimeout(() => {
+      window.location.href = '/login'
+    }, 3000)
   }
 
   if (auth?.user?.id) {
@@ -44,7 +51,7 @@ export function Register() {
   }
 
   return (
-    <div className="min-h-screen bg-white text-white flex flex-col items-center">
+    <div className="min-h-screen bg-white text-white flex flex-col items-center overflow-hidden">
       <header className="w-full flex justify-center px-5 py-5 border-b-2 border-red-300">
         <div className="max-w-[150px]">
           <img src="/assets/logo/pecopa_white.svg" alt="NaTrave Logo" />
@@ -56,63 +63,17 @@ export function Register() {
           <NavLink to="/" title="Voltar para Home">
             <MdArrowBack size={32} color="#AF053F" />
           </NavLink>
-          <h1 className="text-red-700 font-bold text-xl">Crie sua conta</h1>
+          <h1 className="text-red-700 font-bold text-xl">Redefinir senha</h1>
         </header>
 
-        <dialog
-          id="verify-email-dialog"
-          title="Verifique seu e-mail"
-          className={`dialog ${dialogOpen ? 'flex' : 'hidden'}`}
-        >
-          <p className="text-center text-md">
-            Um email de verificação foi enviado para {formik.values.email}.
-          </p>
-
-          <p className="text-center text-md">
-            Acesse seu email e clique no link para confirmar seu cadastro.
-          </p>
-
-          <button
-            onClick={() => {
-              setdialogOpen(false)
-              formik.resetForm()
-
-              window.location.href = '/login'
-            }}
-            className="text-white bg-red-500 hover:bg-red-300 h-10 mt-6 px-5 py-3 flex items-center justify-center rounded-lg"
-          >
-            Ok
-          </button>
-        </dialog>
+        <p className="text-red-700 text-lg mt-8">
+          Redefina sua senha para continuar.
+        </p>
 
         <form
           onSubmit={formik.handleSubmit}
           className="flex flex-col gap-5 my-8"
         >
-          <Input
-            label="Seu nome"
-            name="name"
-            type="text"
-            error={formik.touched.name && formik.errors.name}
-            placeholder="Digite seu nome"
-            value={formik.values.name}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            required
-          />
-
-          <Input
-            label="Seu nome de usuário"
-            name="username"
-            type="text"
-            error={formik.touched.username && formik.errors.username}
-            placeholder="Digite seu nome de usuário"
-            value={formik.values.username}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            required
-          />
-
           <Input
             label="Seu e-mail"
             name="email"
@@ -123,10 +84,11 @@ export function Register() {
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
             required
+            disabled
           />
 
           <Input
-            label="Sua senha"
+            label="Informe uma nova senha"
             name="password"
             type="password"
             error={formik.touched.password && formik.errors.password}
@@ -138,13 +100,13 @@ export function Register() {
           />
 
           <Input
-            label="Confirme sua senha"
+            label="Confirme a nova senha"
             name="confirmPassword"
             type="password"
             error={
               formik.touched.confirmPassword && formik.errors.confirmPassword
             }
-            placeholder="Digite sua senha"
+            placeholder="Confirme sua senha"
             value={formik.values.confirmPassword}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
@@ -167,7 +129,7 @@ export function Register() {
                 visible={true}
               />
             ) : (
-              'Criar minha conta'
+              'Enviar'
             )}
           </button>
         </form>

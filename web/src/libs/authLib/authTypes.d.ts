@@ -28,3 +28,10 @@ export type LoginFormValues = Omit<
   RegisterFormValues,
   'name' | 'username' | 'confirmPassword'
 >
+
+export type ResetPasswordFormValues = {
+  email: string
+  password: string
+  confirmPassword: string
+  token: string
+}

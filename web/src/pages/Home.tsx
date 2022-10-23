@@ -9,7 +9,7 @@ export function Home() {
   )
 
   if (auth?.user?.id) {
-    return <Navigate to="/palpites" replace />
+    return <Navigate to={`/palpites/${auth.user.username}`} replace />
   }
 
   return (

@@ -6,6 +6,8 @@ import { Guesses } from './pages/Guesses'
 import { Home } from './pages/Home'
 import { List } from './pages/List'
 import { Login } from './pages/Login'
+import { Forgot } from './pages/password/Forgot'
+import { Reset } from './pages/password/Reset'
 import { Profile } from './pages/Profile'
 import { Register } from './pages/Register'
 
@@ -45,6 +47,14 @@ const router = createBrowserRouter([
   {
     path: '/email/ja-verificado',
     element: <AlreadyVerifiedMail />,
+  },
+  {
+    path: '/senha/recuperar',
+    element: <Forgot />,
+  },
+  {
+    path: '/senha/redefinir',
+    element: <Reset />,
   },
 ])
 
