@@ -21,7 +21,7 @@ export function Bets() {
   const { username } = useParams()
   const [_, copyToClipboard] = useCopyToClipboard()
 
-  const link = `${import.meta.env.VITE_APP_URL}/apostas/${username}`
+  const link = `${import.meta.env.VITE_APP_URL}/palpites/${username}`
 
   const { error: fetchUserError, isLoading: fetchUserIsLoading } = useQuery(
     ['user'],

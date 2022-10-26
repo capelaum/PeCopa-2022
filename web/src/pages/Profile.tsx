@@ -15,7 +15,6 @@ export function Profile() {
     import.meta.env.VITE_LOCAL_STORAGE_NAME,
     {} as Auth
   )
-  console.log('🚀 ~ auth', auth)
 
   const formik = useFormik({
     onSubmit: (values) => handleUpdateUser(values),
@@ -47,7 +46,13 @@ export function Profile() {
       user,
     })
 
-    formik.resetForm()
+    formik.setValues({
+      name: user.name,
+      username: user.username,
+      email: user.email,
+      password: '',
+      confirmPassword: '',
+    })
   }
 
   if (!auth?.user?.id) {
@@ -58,15 +63,11 @@ export function Profile() {
     <div className="min-h-screen bg-white flex flex-col items-center">
       <Header>
         <h1 className="text-xl sm:text-2xl text-white font-bold">
-          Luís Vinicius Capelletto
+          Editar Perfil
         </h1>
       </Header>
 
       <main className="max-w-[712px] w-full flex flex-col items-center gap-8 my-8 px-5 flex-1">
-        <h2 className="w-full text-red-500 font-bold text-xl sm:text-2xl">
-          Editar Perfil
-        </h2>
-
         <form
           onSubmit={formik.handleSubmit}
           className="w-full flex flex-col gap-5"
@@ -129,7 +130,6 @@ export function Profile() {
             value={formik.values.confirmPassword}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
-            required
           />
 
           <button

@@ -40,8 +40,7 @@ export const updateProfileValidationSchema = yup.object().shape({
   confirmPassword: yup
     .string()
     .oneOf([yup.ref('password'), null], 'As senhas devem ser iguais.')
-    .min(8, 'Senha deve ter pelo menos 8 caracteres')
-    .required('Confirme sua senha.'),
+    .min(8, 'Senha deve ter pelo menos 8 caracteres'),
 })
 
 export const forgotPasswordValidationSchema = yup.object().shape({
