@@ -1,7 +1,7 @@
 import { api } from '@/services/api'
 import { toast } from 'react-toastify'
 import { Auth } from '../authLib/authTypes'
-import { UpdateProfileFormValues, User } from './userTypes'
+import { User } from './userTypes'
 
 export const getUser = async (username: string) => {
   try {
@@ -24,14 +24,11 @@ export const getUsers = async () => {
   }
 }
 
-export const updateUser = async (
-  values: UpdateProfileFormValues,
-  auth: Auth
-) => {
+export const updateUser = async (updatedUser: FormData, auth: Auth) => {
   try {
-    const response: { data: User } = await api.put(
-      `/users/${auth.user.id}`,
-      values,
+    const response: { data: User } = await api.post(
+      `/users/${auth.user.id}?_method=PUT`,
+      updatedUser,
       {
         headers: {
           Authorization: `Bearer ${auth.token}`,

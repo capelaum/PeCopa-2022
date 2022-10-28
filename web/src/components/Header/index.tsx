@@ -1,11 +1,12 @@
 import { Auth } from '@/libs/authLib/authTypes'
 import { ReactNode, useEffect, useState } from 'react'
 import { BsPeopleFill } from 'react-icons/bs'
-import { MdHome, MdPerson } from 'react-icons/md'
+import { MdHome } from 'react-icons/md'
 import { TbEdit, TbLogout, TbStars } from 'react-icons/tb'
 import { NavLink, useLocation, useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { useLocalStorage } from 'react-use'
+import AvatarDefault from '../AvatarDefault'
 
 interface HeaderProps {
   children: ReactNode
@@ -97,7 +98,13 @@ export function Header({ children }: HeaderProps) {
                   title="Editar perfil"
                   className={`header-link ${profileActive}`}
                 >
-                  <MdPerson size={28} color="#F4F6FF" />
+                  <AvatarDefault
+                    avatarUrl={auth.user.avatarUrl}
+                    alt={auth.user.username}
+                    value={auth.user.username}
+                    size={30}
+                    border={true}
+                  />
                 </NavLink>
 
                 <button

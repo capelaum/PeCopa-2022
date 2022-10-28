@@ -1,3 +1,4 @@
+import { AvatarDropzone } from '@/components/AvatarDropzone'
 import { Footer } from '@/components/Footer'
 import { Header } from '@/components/Header'
 import { Input } from '@/components/Input'
@@ -6,11 +7,15 @@ import { updateUser } from '@/libs/usersLib/usersApi'
 import { UpdateProfileFormValues } from '@/libs/usersLib/userTypes'
 import { updateProfileValidationSchema } from '@/validations/formValidations'
 import { useFormik } from 'formik'
+import { useEffect, useState } from 'react'
 import { ThreeDots } from 'react-loader-spinner'
 import { Navigate } from 'react-router-dom'
 import { useLocalStorage } from 'react-use'
 
 export function Profile() {
+  const [avatar, setAvatar] = useState<File | null>(null)
+  const [preview, setPreview] = useState<string | null>(null)
+
   const [auth, setAuth] = useLocalStorage(
     import.meta.env.VITE_LOCAL_STORAGE_NAME,
     {} as Auth
@@ -23,19 +28,43 @@ export function Profile() {
       username: auth?.user?.username ?? '',
       email: auth?.user?.email ?? '',
       password: '',
+      avatar: auth?.user?.avatarUrl ?? null,
       confirmPassword: '',
     },
     validationSchema: updateProfileValidationSchema,
   })
 
+  useEffect(() => {
+    if (avatar) {
+      formik.setFieldValue('avatar', avatar)
+    }
+  }, [avatar])
+
   const handleUpdateUser = async (values: UpdateProfileFormValues) => {
+    console.log('🚀 ~ values', values)
+
     if (!auth?.token) {
       return
     }
 
     const { token } = auth
 
-    const user = await updateUser(values, auth)
+    const formData = new FormData()
+
+    formData.append('name', values.name)
+    formData.append('username', values.username)
+    formData.append('email', values.email)
+
+    if (values.password && values.confirmPassword) {
+      formData.append('password', values.password)
+      formData.append('confirmPassword', values.confirmPassword)
+    }
+
+    if (avatar) {
+      formData.append('avatar', values.avatar as File)
+    }
+
+    const user = await updateUser(formData, auth)
 
     if (!user) {
       return
@@ -51,6 +80,7 @@ export function Profile() {
       username: user.username,
       email: user.email,
       password: '',
+      avatar: user.avatarUrl ?? null,
       confirmPassword: '',
     })
   }
@@ -67,11 +97,17 @@ export function Profile() {
         </h1>
       </Header>
 
-      <main className="max-w-[712px] w-full flex flex-col items-center gap-8 my-8 px-5 flex-1">
+      <main className="max-w-[712px] w-full flex flex-col items-center gap-8 mt-8 mb-12 px-5 flex-1">
         <form
           onSubmit={formik.handleSubmit}
           className="w-full flex flex-col gap-5"
         >
+          <AvatarDropzone
+            setAvatar={setAvatar}
+            setPreview={setPreview}
+            preview={preview}
+          />
+
           <Input
             label="Seu nome"
             name="name"
