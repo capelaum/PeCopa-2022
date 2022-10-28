@@ -2,12 +2,18 @@ import { AvatarDropzone } from '@/components/AvatarDropzone'
 import { Footer } from '@/components/Footer'
 import { Header } from '@/components/Header'
 import { Input } from '@/components/Input'
+import { DialogModal } from '@/components/Modal'
 import { Auth } from '@/libs/authLib/authTypes'
-import { deleteUserAvatar, updateUser } from '@/libs/usersLib/usersApi'
+import {
+  deleteUser,
+  deleteUserAvatar,
+  updateUser,
+} from '@/libs/usersLib/usersApi'
 import { UpdateProfileFormValues } from '@/libs/usersLib/userTypes'
 import { updateProfileValidationSchema } from '@/validations/formValidations'
 import { useFormik } from 'formik'
 import { useEffect, useState } from 'react'
+import { BsExclamationTriangleFill } from 'react-icons/bs'
 import { MdOutlineNoPhotography } from 'react-icons/md'
 import { ThreeDots } from 'react-loader-spinner'
 import { Navigate } from 'react-router-dom'
@@ -16,13 +22,13 @@ import { useLocalStorage } from 'react-use'
 export function Profile() {
   const [avatar, setAvatar] = useState<File | null>(null)
   const [preview, setPreview] = useState<string | null>(null)
+  const [dialogOpen, setDialogOpen] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
 
   const [auth, setAuth] = useLocalStorage(
     import.meta.env.VITE_LOCAL_STORAGE_NAME,
     {} as Auth
   )
-
-  console.log('🚀 ~ auth', auth)
 
   const formik = useFormik({
     onSubmit: (values) => handleUpdateUser(values),
@@ -44,8 +50,6 @@ export function Profile() {
   }, [avatar])
 
   const handleUpdateUser = async (values: UpdateProfileFormValues) => {
-    console.log('🚀 ~ values', values)
-
     if (!auth?.token) {
       return
     }
@@ -93,11 +97,14 @@ export function Profile() {
       return
     }
 
+    setIsLoading(true)
+
     const { token } = auth
 
     const result = await deleteUserAvatar(auth)
 
     if (!result) {
+      setIsLoading(false)
       return
     }
 
@@ -109,7 +116,29 @@ export function Profile() {
     setAvatar(null)
     setPreview(null)
 
-    formik.setFieldValue('avatar', null)
+    setIsLoading(false)
+  }
+
+  const handleDeleteUser = async () => {
+    if (!auth?.token) {
+      return
+    }
+
+    setIsLoading(true)
+
+    const result = await deleteUser(auth)
+
+    if (!result) {
+      setIsLoading(false)
+      return
+    }
+
+    setAuth({} as Auth)
+
+    setAvatar(null)
+    setPreview(null)
+
+    setIsLoading(false)
   }
 
   if (!auth?.user?.id) {
@@ -124,7 +153,7 @@ export function Profile() {
         </h1>
       </Header>
 
-      <main className="max-w-[712px] w-full flex flex-col items-center gap-8 mt-8 mb-12 px-5 flex-1">
+      <main className="max-w-[712px] w-full flex flex-col items-center gap-8 mt-8 mb-12 px-5 flex-1 transition duration-300">
         <form
           onSubmit={formik.handleSubmit}
           className="w-full flex flex-col gap-5"
@@ -136,18 +165,38 @@ export function Profile() {
             preview={preview}
           />
 
-          <button
-            type="button"
-            onClick={handleDeleteAvatar}
-            className="px-4 py-2 text-sm rounded-2xl mx-auto text-white bg-red-500 hover:bg-red-300 flex gap-2 items-center"
-          >
-            <MdOutlineNoPhotography
-              className="inline-block "
-              color="#F4F6FF"
-              size={20}
-            />
-            Excluir imagem de perfil
-          </button>
+          {auth?.user.avatarUrl && (
+            <button
+              type="button"
+              onClick={handleDeleteAvatar}
+              className="
+              px-4 py-2 text-sm rounded-2xl mx-auto
+              text-white bg-red-500 hover:bg-red-300
+              flex gap-2 items-center
+              disabled:opacity-80 disabled:cursor-not-allowed
+            "
+              disabled={isLoading}
+            >
+              {isLoading ? (
+                <ThreeDots
+                  height="20"
+                  width="20"
+                  radius="4"
+                  color="#F4F6FF"
+                  ariaLabel="three-dots-loading"
+                  wrapperStyle={{}}
+                  visible={true}
+                />
+              ) : (
+                <MdOutlineNoPhotography
+                  className="inline-block "
+                  color="#F4F6FF"
+                  size={20}
+                />
+              )}
+              Excluir imagem de perfil
+            </button>
+          )}
 
           <Input
             label="Seu nome"
@@ -229,6 +278,50 @@ export function Profile() {
             )}
           </button>
         </form>
+
+        <DialogModal
+          id="confirm-delete-user"
+          title="Excluir conta?"
+          setDialogOpen={setDialogOpen}
+          dialogOpen={dialogOpen}
+        >
+          <p className="">Você tem certeza que deseja excluir sua conta?</p>
+
+          <p className="mt-2">Essa ação não poderá ser desfeita.</p>
+
+          <div className="flex items-center gap-6 w-full justify-start">
+            <button
+              onClick={() => {
+                handleDeleteUser()
+              }}
+              className="mt-6"
+            >
+              Excluir
+            </button>
+
+            <button
+              onClick={() => {
+                setDialogOpen(false)
+              }}
+              className="mt-6"
+            >
+              Cancelar
+            </button>
+          </div>
+        </DialogModal>
+
+        <button
+          onClick={() => setDialogOpen(true)}
+          className="
+            w-full text-base px-4 py-3 rounded-2xl
+            text-white bg-red-600 hover:opacity-95
+            transition duration-300
+            flex gap-2 items-center justify-center
+          "
+        >
+          <BsExclamationTriangleFill size={20} color="#F4F6FF" />
+          Excluir conta
+        </button>
       </main>
 
       <Footer />

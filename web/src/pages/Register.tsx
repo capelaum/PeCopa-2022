@@ -1,4 +1,5 @@
 import { Input } from '@/components/Input'
+import { DialogModal } from '@/components/Modal'
 import { register } from '@/libs/authLib/authApi'
 import { Auth, RegisterFormValues } from '@/libs/authLib/authTypes'
 import { registerValidationSchema } from '@/validations/formValidations'
@@ -10,7 +11,7 @@ import { Navigate, NavLink } from 'react-router-dom'
 import { useLocalStorage } from 'react-use'
 
 export function Register() {
-  const [dialogOpen, setdialogOpen] = useState(false)
+  const [dialogOpen, setDialogOpen] = useState(false)
 
   const [auth] = useLocalStorage(
     import.meta.env.VITE_LOCAL_STORAGE_NAME,
@@ -36,7 +37,7 @@ export function Register() {
       return
     }
 
-    setdialogOpen(true)
+    setDialogOpen(true)
   }
 
   if (auth?.user?.id) {
@@ -59,31 +60,33 @@ export function Register() {
           <h1 className="text-red-700 font-bold text-xl">Crie sua conta</h1>
         </header>
 
-        <dialog
+        <DialogModal
           id="verify-email-dialog"
           title="Verifique seu e-mail"
-          className={`dialog ${dialogOpen ? 'flex' : 'hidden'}`}
+          setDialogOpen={setDialogOpen}
+          dialogOpen={dialogOpen}
         >
-          <p className="text-center text-md">
-            Um email de verificação foi enviado para {formik.values.email}.
+          <p className="text-lg">
+            Um email de verificação foi enviado para{' '}
+            <span className="font-bold">{formik.values.email}</span>
           </p>
 
-          <p className="text-center text-md">
+          <p className="mt-2">
             Acesse seu email e clique no link para confirmar seu cadastro.
           </p>
 
           <button
             onClick={() => {
-              setdialogOpen(false)
+              setDialogOpen(false)
               formik.resetForm()
 
               window.location.href = '/login'
             }}
-            className="text-white bg-red-500 hover:bg-red-300 h-10 mt-6 px-5 py-3 flex items-center justify-center rounded-lg"
+            className="mt-6"
           >
             Ok
           </button>
-        </dialog>
+        </DialogModal>
 
         <form
           onSubmit={formik.handleSubmit}

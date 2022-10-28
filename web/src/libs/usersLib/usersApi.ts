@@ -69,3 +69,26 @@ export const deleteUserAvatar = async (auth: Auth) => {
     return false
   }
 }
+
+export const deleteUser = async (auth: Auth) => {
+  try {
+    const response = await api.delete(`/users/${auth.user.id}`, {
+      headers: {
+        Authorization: `Bearer ${auth.token}`,
+      },
+    })
+
+    if (response.status !== 204) {
+      throw new Error('Erro ao deletar usuário. Por favor, tente novamente.')
+    }
+
+    toast.success('Conta excluída com sucesso!')
+
+    return true
+  } catch (error) {
+    console.error('🚀 ~ error', error)
+    toast.error((error as any).response.data.message)
+
+    return false
+  }
+}

@@ -6,8 +6,7 @@ interface AvatarDefaultProps {
   border?: boolean
   avatarUrl?: string | null
   alt?: string
-  width?: number
-  height?: number
+  isHeader?: boolean
 }
 
 export default function AvatarDefault({
@@ -15,16 +14,17 @@ export default function AvatarDefault({
   size = 32,
   border,
   avatarUrl,
-  width = 32,
-  height = 32,
   alt = 'Avatar',
+  isHeader,
 }: AvatarDefaultProps) {
   if (avatarUrl) {
     return (
       <img
         src={avatarUrl}
         alt={alt}
-        className={`object-cover rounded-full w-[${width}px] h-[${height}px]`}
+        className={`object-cover rounded-full ${
+          isHeader ? 'w-8 h-8' : 'w-full h-full'
+        }`}
       />
     )
   }

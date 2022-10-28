@@ -96,14 +96,18 @@ export function Header({ children }: HeaderProps) {
                 <NavLink
                   to="/perfil"
                   title="Editar perfil"
-                  className={`header-link ${profileActive}`}
+                  className={`
+                    hover:border-white border-2 mb-4 rounded-full p-[1px]
+                    ${profileActive ? 'border-white' : 'border-transparent'}
+                  `}
                 >
                   <AvatarDefault
                     avatarUrl={auth.user.avatarUrl}
                     alt={auth.user.username}
                     value={auth.user.username}
-                    size={30}
                     border={true}
+                    size={30}
+                    isHeader
                   />
                 </NavLink>
 
