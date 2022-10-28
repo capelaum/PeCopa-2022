@@ -46,3 +46,26 @@ export const updateUser = async (updatedUser: FormData, auth: Auth) => {
     toast.error((error as any).response.data.message)
   }
 }
+
+export const deleteUserAvatar = async (auth: Auth) => {
+  try {
+    const response = await api.delete(`/users/${auth.user.id}/avatar`, {
+      headers: {
+        Authorization: `Bearer ${auth.token}`,
+      },
+    })
+
+    if (response.status !== 204) {
+      throw new Error('Erro ao deletar avatar. Por favor, tente novamente.')
+    }
+
+    toast.success('Avatar removido com sucesso!')
+
+    return true
+  } catch (error) {
+    console.error('🚀 ~ error', error)
+    toast.error((error as any).response.data.message)
+
+    return false
+  }
+}

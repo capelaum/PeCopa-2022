@@ -3,11 +3,12 @@ import { Footer } from '@/components/Footer'
 import { Header } from '@/components/Header'
 import { Input } from '@/components/Input'
 import { Auth } from '@/libs/authLib/authTypes'
-import { updateUser } from '@/libs/usersLib/usersApi'
+import { deleteUserAvatar, updateUser } from '@/libs/usersLib/usersApi'
 import { UpdateProfileFormValues } from '@/libs/usersLib/userTypes'
 import { updateProfileValidationSchema } from '@/validations/formValidations'
 import { useFormik } from 'formik'
 import { useEffect, useState } from 'react'
+import { MdOutlineNoPhotography } from 'react-icons/md'
 import { ThreeDots } from 'react-loader-spinner'
 import { Navigate } from 'react-router-dom'
 import { useLocalStorage } from 'react-use'
@@ -20,6 +21,8 @@ export function Profile() {
     import.meta.env.VITE_LOCAL_STORAGE_NAME,
     {} as Auth
   )
+
+  console.log('🚀 ~ auth', auth)
 
   const formik = useFormik({
     onSubmit: (values) => handleUpdateUser(values),
@@ -85,6 +88,30 @@ export function Profile() {
     })
   }
 
+  const handleDeleteAvatar = async () => {
+    if (!auth?.token) {
+      return
+    }
+
+    const { token } = auth
+
+    const result = await deleteUserAvatar(auth)
+
+    if (!result) {
+      return
+    }
+
+    setAuth({
+      token,
+      user: { ...auth.user, avatarUrl: null },
+    })
+
+    setAvatar(null)
+    setPreview(null)
+
+    formik.setFieldValue('avatar', null)
+  }
+
   if (!auth?.user?.id) {
     return <Navigate to="/" replace />
   }
@@ -103,10 +130,24 @@ export function Profile() {
           className="w-full flex flex-col gap-5"
         >
           <AvatarDropzone
+            auth={auth}
             setAvatar={setAvatar}
             setPreview={setPreview}
             preview={preview}
           />
+
+          <button
+            type="button"
+            onClick={handleDeleteAvatar}
+            className="px-4 py-2 text-sm rounded-2xl mx-auto text-white bg-red-500 hover:bg-red-300 flex gap-2 items-center"
+          >
+            <MdOutlineNoPhotography
+              className="inline-block "
+              color="#F4F6FF"
+              size={20}
+            />
+            Excluir imagem de perfil
+          </button>
 
           <Input
             label="Seu nome"
