@@ -77,12 +77,24 @@ td {
 }
 
 .header-link {
-  @apply border-b-[3px] border-b-transparent pb-4
-  hover:border-b-white;
+  @apply hover:bg-white pt-10 pb-12 px-2 h-20 rounded-b-3xl
+  transition duration-200;
+}
+
+.header-link svg {
+  @apply stroke-white text-white transition duration-200;
+}
+
+.header-link:hover svg {
+  @apply stroke-red-500 text-red-500;
 }
 
 .header-link-active {
-  @apply border-b-[3px] border-white;
+  @apply text-red-500 bg-white transition duration-200;
+}
+
+.header-link-active svg {
+  @apply stroke-red-500 text-red-500;
 }
 
 .dialog {

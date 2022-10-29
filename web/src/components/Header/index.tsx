@@ -55,23 +55,23 @@ export function Header({ children }: HeaderProps) {
   const listActive = currentPath === 'lista' ? 'header-link-active' : ''
 
   return (
-    <header className="bg-red-500 w-full px-5 py-6 flex flex-col items-center">
+    <header className="bg-red-500 w-full px-5 pb-6 flex flex-col items-center">
       <div className="max-w-2xl w-full flex flex-col gap-10">
-        <section className="w-full flex justify-between items-center">
+        <section className="w-full flex justify-between items-end">
           <img
             src="/assets/logo/pecopa_red.svg"
             alt="NaTrave Logo"
-            className="max-w-[100px]"
+            className="max-w-[100px] pb-4"
           />
 
-          <div className="flex items-center gap-4 py-4 h-12">
+          <div className="flex items-center gap-2">
             {(auth?.user || username) && (
               <NavLink
                 to={`/palpites/${auth?.user ? auth.user.username : username}`}
                 title="Seus palpites"
                 className={`header-link ${betsActive}`}
               >
-                <TbStars size={24} color="#F4F6FF" />
+                <TbStars size={24} />
               </NavLink>
             )}
 
@@ -82,7 +82,7 @@ export function Header({ children }: HeaderProps) {
                   title="Fazer palpites"
                   className={`header-link ${guessesActive}`}
                 >
-                  <TbEdit size={28} color="#F4F6FF" />
+                  <TbEdit size={28} />
                 </NavLink>
 
                 <NavLink
@@ -90,16 +90,13 @@ export function Header({ children }: HeaderProps) {
                   title="Listagem de participantes"
                   className={`header-link ${listActive}`}
                 >
-                  <BsPeopleFill size={28} color="#F4F6FF" />
+                  <BsPeopleFill size={28} />
                 </NavLink>
 
                 <NavLink
                   to="/perfil"
                   title="Editar perfil"
-                  className={`
-                    hover:border-white border-2 mb-4 rounded-full p-[1px]
-                    ${profileActive ? 'border-white' : 'border-transparent'}
-                  `}
+                  className={`header-link ${profileActive}`}
                 >
                   <AvatarDefault
                     avatarUrl={auth.user.avatarUrl}
@@ -116,7 +113,7 @@ export function Header({ children }: HeaderProps) {
                   onClick={logout}
                   className="header-link"
                 >
-                  <TbLogout size={28} color="#F4F6FF" />
+                  <TbLogout size={28} />
                 </button>
               </>
             )}
@@ -128,11 +125,11 @@ export function Header({ children }: HeaderProps) {
                   title="Listagem de jogadores"
                   className={`header-link ${listActive}`}
                 >
-                  <BsPeopleFill size={28} color="#F4F6FF" />
+                  <BsPeopleFill size={28} />
                 </NavLink>
 
                 <NavLink to="/" title="Home" className="header-link">
-                  <MdHome size={28} color="#F4F6FF" />
+                  <MdHome size={28} />
                 </NavLink>
               </>
             )}

@@ -35,6 +35,7 @@ export default function AvatarDefault({
       size={size}
       borderSize={2}
       border={border}
+      borderColor="#F4F6FF"
       style="character"
     />
   )

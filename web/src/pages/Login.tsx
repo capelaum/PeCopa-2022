@@ -87,7 +87,7 @@ export function Login() {
 
             <NavLink
               to="/senha/recuperar"
-              className="text-red-500 block font-semibold text-md hover:underline mr-auto mt-5"
+              className="text-red-500 inline-block font-semibold text-md hover:underline mr-auto mt-5"
             >
               Esqueceu sua senha?
             </NavLink>

@@ -12,6 +12,9 @@ module.exports = {
       '3xl': ['48px', '56px'],
     },
     extend: {
+      backgroundImage: {
+        'card-bg': "url('/assets/imgs/card_bg.svg')",
+      },
       colors: {
         white: '#F4F6FF',
         black: '#0B0E16',
