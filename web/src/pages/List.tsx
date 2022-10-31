@@ -42,25 +42,25 @@ export function List() {
                   relative bg-red-500 rounded-2xl overflow-hidden
                   flex flex-col items-center
                   bg-card-bg bg-center bg-no-repeat bg-cover
-                  shadow-xl border-b-8 border-red-300
+                  shadow-xl border-b-8 border-pink-900
               "
               >
                 <header
                   className="
-                    bg-gradient-to-b from-red-500 to-transparent
-                    px-3 py-2 flex items-center justify-between
+                    to-transparent
+                    px-5 py-2 flex items-center justify-center
                     text-white w-full text-lg
                      font-semibold
                 "
                 >
-                  <h1 className="text-ellipsis  overflow-hidden">
+                  <h1 className="text-ellipsis text-center overflow-hidden">
                     {user.username}
                   </h1>
                 </header>
 
                 <div
                   className={`
-                    w-32 h-32 mt-8 mb-8
+                    w-32 h-32 my-6
                     rounded-full flex items-center justify-center overflow-hidden
                     ${user.avatarUrl ? 'border-4 border-white' : ''}
                   `}
@@ -69,7 +69,7 @@ export function List() {
                     avatarUrl={user.avatarUrl}
                     alt={user.username}
                     value={user.username}
-                    size={128}
+                    size={120}
                   />
                 </div>
 
@@ -84,7 +84,7 @@ export function List() {
                   Ver palpites
                 </NavLink>
 
-                <h3 className="bg-red-300 text-white font-bold text-sm rounded-t-lg px-2 py-1">
+                <h3 className="bg-pink-900 text-white font-bold text-sm rounded-t-lg px-2 py-1">
                   {user.guessesCount} palpites
                 </h3>
               </div>
