@@ -73,7 +73,7 @@ export function Bets() {
                 title="Copiar link"
                 className="
                   max-w-full overflow-hidden text-ellipsis
-                  flex items-center gap-2 flex-nowrap
+                  flex items-center gap-2 flex-nowrap justify-start
                   bg-red-300 p-2 rounded-lg
                   hover:bg-opacity-90 hover:cursor-pointer
                 "
