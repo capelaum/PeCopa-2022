@@ -122,7 +122,7 @@ export function Header({ children }: HeaderProps) {
               <>
                 <NavLink
                   to="/lista"
-                  title="Listagem de jogadores"
+                  title="Listagem de participantes"
                   className={`header-link ${listActive}`}
                 >
                   <BsPeopleFill size={28} />

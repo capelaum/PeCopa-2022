@@ -32,12 +32,23 @@ export function List() {
           />
         )}
 
-        {users.error && <span>Oops! Algo deu errado...</span>}
+        {users.error && (
+          <span className="font-bold text-lg text-red-500">
+            Oops! Algo deu errado...
+          </span>
+        )}
+
+        {users.value?.length === 0 && (
+          <span className="font-bold text-lg text-red-500">
+            Nenhum participante encontrado
+          </span>
+        )}
 
         {!users.error && !users.loading && (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
             {users.value?.map((user) => (
               <div
+                key={user.id}
                 className="
                   relative bg-red-500 rounded-2xl overflow-hidden
                   flex flex-col items-center
