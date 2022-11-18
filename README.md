@@ -1,6 +1,12 @@
-# ![Bola de futebol](.github/ball.png) PeCopa 2022 ![HBola de futebol](.github/ball.png)
+<div align="center">
+  <h1>
+    <img src=".github/ball.png" alt="Bola de futebol" />
+    PeCopa 2022
+    <img src=".github/ball.png" alt="Bola de futebol" />
+  </h1>
+</div>
 
-![Capa do projeto PeCopa 2022](.github/Capa.png)
+![Capa do projeto PeCopa 2022](.github/Pecopa_2022.png)
 
 ## Descrição
 
