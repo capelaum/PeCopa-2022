@@ -79,7 +79,9 @@ export function Bets() {
                 "
               >
                 <TbCopy size={20} className="ml-2 min-w-[16px]" />
-                <span className="overflow-hidden text-ellipsis">{link}</span>
+                <span className="max-w-full text-left overflow-hidden text-ellipsis">
+                  {link}
+                </span>
               </button>
             </div>
           )}
