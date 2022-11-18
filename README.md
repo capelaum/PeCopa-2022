@@ -8,29 +8,25 @@ Aplicação para realizar palpites ou apostas de placares dos jogos da Copa do M
 
 ## Funcionalidades
 
+### Usuário
+
 - [x] Cadastro
 - [x] Login
-- [x] Criar palpites
-- [x] Compartilhar palpites
+- [x] Verificação de E-mail
+- [x] Edição de Perfil
+- [x] Recuperação de Senha
+
+### Aplicação
+
 - [x] Fase de Grupos
 - [x] Fase de Mata-mata
-- [x] Compartilhamento de palpites
-- [x] Listagem de jogadores
+- [x] Criação de Palpites
+- [x] Compartilhamento de Palpites
+- [x] Listagem de Participantes
 
 ## [Layout Figma][figma]
 
 ## Tech
-
-### API
-
-- [Prisma][prisma]
-- [Koa][koa]
-- [bcrypt][bcrypt]
-- [jsonwebtoken][jsonwebtoken]
-- [date-fns][date-fns]
-- [dotenv-safe][dotenv-safe]
-
-### Web
 
 - [Vite][vite]
 - [TailwindCSS][tailwind]
