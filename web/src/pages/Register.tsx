@@ -1,18 +1,21 @@
-import { RegisterFormValues } from '@/@types/form'
-import { AuthData } from '@/@types/response'
 import { Input } from '@/components/Input'
-import { register } from '@/libs/authLib'
+import { DialogModal } from '@/components/Modal'
+import { register } from '@/libs/authLib/authApi'
+import { Auth, RegisterFormValues } from '@/libs/authLib/authTypes'
 import { registerValidationSchema } from '@/validations/formValidations'
 import { useFormik } from 'formik'
+import { useState } from 'react'
 import { MdArrowBack } from 'react-icons/md'
 import { ThreeDots } from 'react-loader-spinner'
 import { Navigate, NavLink } from 'react-router-dom'
 import { useLocalStorage } from 'react-use'
 
 export function Register() {
-  const [auth, setAuth] = useLocalStorage(
+  const [dialogOpen, setDialogOpen] = useState(false)
+
+  const [auth] = useLocalStorage(
     import.meta.env.VITE_LOCAL_STORAGE_NAME,
-    {} as AuthData
+    {} as Auth
   )
 
   const formik = useFormik({
@@ -22,17 +25,23 @@ export function Register() {
       username: '',
       email: '',
       password: '',
+      confirmPassword: '',
     },
     validationSchema: registerValidationSchema,
   })
 
   const handleRegister = async (values: RegisterFormValues) => {
-    const data = await register(values)
-    setAuth(data)
+    const response = await register(values)
+
+    if (!response) {
+      return
+    }
+
+    setDialogOpen(true)
   }
 
   if (auth?.user?.id) {
-    return <Navigate to="/palpites" replace />
+    return <Navigate to={`/palpites/${auth.user.username}`} replace />
   }
 
   return (
@@ -51,65 +60,99 @@ export function Register() {
           <h1 className="text-red-700 font-bold text-xl">Crie sua conta</h1>
         </header>
 
+        <DialogModal
+          id="verify-email-dialog"
+          title="Verifique seu e-mail"
+          setDialogOpen={setDialogOpen}
+          dialogOpen={dialogOpen}
+        >
+          <p className="text-lg">
+            Um email de verificação foi enviado para{' '}
+            <span className="font-bold">{formik.values.email}</span>
+          </p>
+
+          <p className="mt-2">
+            Acesse seu email e clique no link para confirmar seu cadastro.
+          </p>
+
+          <button
+            onClick={() => {
+              setDialogOpen(false)
+              formik.resetForm()
+
+              window.location.href = '/login'
+            }}
+            className="mt-6"
+          >
+            Ok
+          </button>
+        </DialogModal>
+
         <form
           onSubmit={formik.handleSubmit}
           className="flex flex-col gap-5 my-8"
         >
-          <div className="input-container">
-            <Input
-              label="Seu nome"
-              name="name"
-              type="text"
-              error={formik.touched.name && formik.errors.name}
-              placeholder="Digite seu nome"
-              value={formik.values.name}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              required
-            />
-          </div>
+          <Input
+            label="Seu nome"
+            name="name"
+            type="text"
+            error={formik.touched.name && formik.errors.name}
+            placeholder="Digite seu nome"
+            value={formik.values.name}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            required
+          />
 
-          <div className="input-container">
-            <Input
-              label="Seu nome de usuário"
-              name="username"
-              type="text"
-              error={formik.touched.username && formik.errors.username}
-              placeholder="Digite seu nome de usuário"
-              value={formik.values.username}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              required
-            />
-          </div>
+          <Input
+            label="Seu nome de usuário"
+            name="username"
+            type="text"
+            error={formik.touched.username && formik.errors.username}
+            placeholder="Digite seu nome de usuário"
+            value={formik.values.username}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            required
+          />
 
-          <div className="input-container">
-            <Input
-              label="Seu e-mail"
-              name="email"
-              type="email"
-              error={formik.touched.email && formik.errors.email}
-              placeholder="Digite seu e-mail"
-              value={formik.values.email}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              required
-            />
-          </div>
+          <Input
+            label="Seu e-mail"
+            name="email"
+            type="email"
+            error={formik.touched.email && formik.errors.email}
+            placeholder="Digite seu e-mail"
+            value={formik.values.email}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            required
+          />
 
-          <div className="input-container">
-            <Input
-              label="Sua senha"
-              name="password"
-              type="password"
-              error={formik.touched.password && formik.errors.password}
-              placeholder="Digite sua senha"
-              value={formik.values.password}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              required
-            />
-          </div>
+          <Input
+            label="Sua senha"
+            name="password"
+            type="password"
+            error={formik.touched.password && formik.errors.password}
+            placeholder="Digite sua senha"
+            value={formik.values.password}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            required
+          />
+
+          <Input
+            label="Confirme sua senha"
+            name="confirmPassword"
+            type="password"
+            error={
+              formik.touched.confirmPassword && formik.errors.confirmPassword
+            }
+            placeholder="Digite sua senha"
+            value={formik.values.confirmPassword}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            required
+          />
 
           <button
             type="submit"

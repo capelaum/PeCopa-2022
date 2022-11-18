@@ -1,7 +1,7 @@
+import AvatarDefault from '@/components/AvatarDefault'
 import { Footer } from '@/components/Footer'
 import { Header } from '@/components/Header'
-import { getUsers } from '@/libs/userLib'
-import { BsFillEyeFill } from 'react-icons/bs'
+import { getUsers } from '@/libs/usersLib/usersApi'
 import { ThreeDots } from 'react-loader-spinner'
 import { NavLink } from 'react-router-dom'
 import { useAsync } from 'react-use'
@@ -17,7 +17,7 @@ export function List() {
     <div className="min-h-screen bg-white flex flex-col items-center">
       <Header>
         <h1 className="text-xl sm:text-2xl text-white font-bold">
-          Listagem de jogadores
+          Participantes
         </h1>
       </Header>
 
@@ -32,36 +32,74 @@ export function List() {
           />
         )}
 
-        {users.error && <span>Oops! Algo deu errado...</span>}
+        {users.error && (
+          <span className="font-bold text-lg text-red-500">
+            Oops! Algo deu errado...
+          </span>
+        )}
+
+        {users.value?.length === 0 && (
+          <span className="font-bold text-lg text-red-500">
+            Nenhum participante encontrado
+          </span>
+        )}
 
         {!users.error && !users.loading && (
-          <div>
-            <table className="w-full border-collapse min-w-[400px]">
-              <thead>
-                <tr>
-                  <th>Username</th>
-                  <th>Nº Palpites</th>
-                  <th>Ver Palpites</th>
-                </tr>
-              </thead>
-              <tbody>
-                {users.value?.map((user) => (
-                  <tr key={user.id}>
-                    <td className="font-bold">{user.username}</td>
-                    <td className="font-bold">{user.totalGuesses}</td>
-                    <td>
-                      <NavLink
-                        to={`/apostas/${user.username}`}
-                        title={`Ver palpites de ${user.username}`}
-                        className="inline-flex items-center justify-center hover:bg-gray-100 p-1 rounded-md"
-                      >
-                        <BsFillEyeFill size={24} color="BB2E57" />
-                      </NavLink>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
+            {users.value?.map((user) => (
+              <div
+                key={user.id}
+                className="
+                  relative bg-red-500 rounded-2xl overflow-hidden
+                  flex flex-col items-center
+                  bg-card-bg bg-center bg-no-repeat bg-cover
+                  shadow-xl border-b-8 border-pink-900
+              "
+              >
+                <header
+                  className="
+                    to-transparent
+                    px-5 py-2 flex items-center justify-center
+                    text-white w-full text-lg
+                     font-semibold
+                "
+                >
+                  <h1 className="text-ellipsis text-center overflow-hidden">
+                    {user.username}
+                  </h1>
+                </header>
+
+                <div
+                  className={`
+                    w-32 h-32 my-6
+                    rounded-full flex items-center justify-center overflow-hidden
+                    ${user.avatarUrl ? 'border-4 border-white' : ''}
+                  `}
+                >
+                  <AvatarDefault
+                    avatarUrl={user.avatarUrl}
+                    alt={user.username}
+                    value={user.username}
+                    size={120}
+                  />
+                </div>
+
+                <NavLink
+                  to={`/palpites/${user.username}`}
+                  title={`Ver palpites de ${user.username}`}
+                  className="
+                  bg-white text-red-500 font-semibold rounded-lg px-4 py-1 mb-10
+                  transition duration-200 hover:scale-110 transform
+                  "
+                >
+                  Ver palpites
+                </NavLink>
+
+                <h3 className="bg-pink-900 text-white font-bold text-sm rounded-t-lg px-2 py-1">
+                  {user.guessesCount} palpites
+                </h3>
+              </div>
+            ))}
           </div>
         )}
       </main>

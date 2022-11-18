@@ -1,24 +1,24 @@
-import { AuthData } from '@/@types/response'
+import { Auth } from '@/libs/authLib/authTypes'
 import { Navigate, NavLink } from 'react-router-dom'
 import { useLocalStorage } from 'react-use'
 
 export function Home() {
   const [auth] = useLocalStorage(
     import.meta.env.VITE_LOCAL_STORAGE_NAME,
-    {} as AuthData
+    {} as Auth
   )
 
   if (auth?.user?.id) {
-    return <Navigate to="/palpites" replace />
+    return <Navigate to={`/palpites/${auth.user.username}`} replace />
   }
 
   return (
     <div className="min-h-screen px-6 py-8 bg-red-700 text-white flex flex-col items-center justify-center">
-      <header className="max-w-[150px] mb-10 md:mb-20">
+      <header className="max-w-[150px] mb-20 md:mb-32">
         <img src="/assets/logo/pecopa_whine.svg" alt="NaTrave Logo" />
       </header>
 
-      <main className="max-w-7xl flex flex-col md:flex-row items-center justify-between gap-6 md:gap-16">
+      <main className="max-w-7xl flex flex-col md:flex-row items-center justify-between gap-12 md:gap-24">
         <div className="max-w-md">
           <img
             src="/assets/imgs/hero_2.png"
@@ -30,6 +30,20 @@ export function Home() {
           <h1 className="text-2xl md:text-3xl text-center md:text-left font-bold mb-4">
             Dê o seu palpite na Copa do Mundo do Catar 2022!
           </h1>
+
+          <NavLink
+            to="/login"
+            title="Fazer login"
+            className="
+              button
+              flex items-center justify-center
+              text-white
+              border border-white
+              hover:bg-red-500 hover:border-red-500
+            "
+          >
+            Fazer login
+          </NavLink>
 
           <NavLink
             to="/cadastro"
@@ -45,17 +59,16 @@ export function Home() {
           </NavLink>
 
           <NavLink
-            to="/login"
-            title="Fazer login"
+            to="/lista"
+            title="Participantes"
             className="
-              button
-              flex items-center justify-center
-              text-white
-              border border-white
-              hover:bg-red-500 hover:border-red-500
+            button
+            flex items-center justify-center
+          bg-white text-red-700
+            hover:bg-red-500 hover:text-white
             "
           >
-            Fazer login
+            Participantes
           </NavLink>
         </section>
       </main>

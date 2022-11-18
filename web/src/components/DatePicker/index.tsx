@@ -6,17 +6,20 @@ interface DatePickerProps {
   prevDay: () => void
   nextDay: () => void
   selectedDate: Date
+  firstGameDate: Date
+  lastGameDate: Date
 }
 
 export function DatePicker({
   prevDay,
   nextDay,
   selectedDate,
+  firstGameDate,
+  lastGameDate,
 }: DatePickerProps) {
   const isPrevButtonDisabled =
-    selectedDate < new Date() || selectedDate <= new Date(2022, 10, 20)
-  const isNextButtonDisabled =
-    selectedDate < new Date() || selectedDate >= new Date(2022, 11, 18)
+    selectedDate < new Date() || selectedDate <= firstGameDate
+  const isNextButtonDisabled = selectedDate >= lastGameDate
 
   return (
     <div className="flex justify-between items-center gap-4">

@@ -1,39 +1,49 @@
 import { Input } from '@/components/Input'
-import { login } from '@/libs/authLib/authApi'
-import { Auth, LoginFormValues } from '@/libs/authLib/authTypes'
-import { loginValidationSchema } from '@/validations/formValidations'
+import { resetPassword } from '@/libs/authLib/authApi'
+import { Auth, ResetPasswordFormValues } from '@/libs/authLib/authTypes'
+import { resetPasswordValidationSchema } from '@/validations/formValidations'
 import { useFormik } from 'formik'
 import { MdArrowBack } from 'react-icons/md'
 import { ThreeDots } from 'react-loader-spinner'
-import { Navigate, NavLink } from 'react-router-dom'
+import { Navigate, NavLink, useSearchParams } from 'react-router-dom'
 import { useLocalStorage } from 'react-use'
 
-export function Login() {
-  const [auth, setAuth] = useLocalStorage(
+export function Reset() {
+  const [searchParams] = useSearchParams()
+
+  const token = searchParams.get('token')
+  const email = searchParams.get('email')
+
+  const [auth] = useLocalStorage(
     import.meta.env.VITE_LOCAL_STORAGE_NAME,
     {} as Auth
   )
 
   const formik = useFormik({
-    onSubmit: (values) => handleLogin(values),
+    onSubmit: (values) => handleResetPassword(values),
     initialValues: {
-      email: '',
+      email: email ?? '',
       password: '',
+      confirmPassword: '',
+      token: token ?? '',
     },
-    validationSchema: loginValidationSchema,
+    validationSchema: resetPasswordValidationSchema,
   })
 
-  const handleLogin = async (values: LoginFormValues) => {
-    const data = await login(values)
+  async function handleResetPassword(values: ResetPasswordFormValues) {
+    const result = await resetPassword(values)
+    console.log('🚀 ~ result', result)
 
-    if (!data) {
+    formik.resetForm()
+
+    if (!result) {
       return
     }
 
-    setAuth({
-      token: data?.token,
-      user: data?.user,
-    })
+    // redirect to login after 3 seconds
+    setTimeout(() => {
+      window.location.href = '/login'
+    }, 3000)
   }
 
   if (auth?.user?.id) {
@@ -53,8 +63,12 @@ export function Login() {
           <NavLink to="/" title="Voltar para Home">
             <MdArrowBack size={32} color="#AF053F" />
           </NavLink>
-          <h1 className="text-red-700 font-bold text-xl">Entre na sua conta</h1>
+          <h1 className="text-red-700 font-bold text-xl">Redefinir senha</h1>
         </header>
+
+        <p className="text-red-700 text-lg mt-8">
+          Redefina sua senha para continuar.
+        </p>
 
         <form
           onSubmit={formik.handleSubmit}
@@ -70,28 +84,34 @@ export function Login() {
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
             required
+            disabled
           />
 
-          <div>
-            <Input
-              label="Sua senha"
-              name="password"
-              type="password"
-              error={formik.touched.password && formik.errors.password}
-              placeholder="Digite sua senha"
-              value={formik.values.password}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              required
-            />
+          <Input
+            label="Informe uma nova senha"
+            name="password"
+            type="password"
+            error={formik.touched.password && formik.errors.password}
+            placeholder="Digite sua senha"
+            value={formik.values.password}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            required
+          />
 
-            <NavLink
-              to="/senha/recuperar"
-              className="text-red-500 inline-block font-semibold text-md hover:underline mr-auto mt-5"
-            >
-              Esqueceu sua senha?
-            </NavLink>
-          </div>
+          <Input
+            label="Confirme a nova senha"
+            name="confirmPassword"
+            type="password"
+            error={
+              formik.touched.confirmPassword && formik.errors.confirmPassword
+            }
+            placeholder="Confirme sua senha"
+            value={formik.values.confirmPassword}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            required
+          />
 
           <button
             type="submit"
@@ -109,7 +129,7 @@ export function Login() {
                 visible={true}
               />
             ) : (
-              'Entrar'
+              'Enviar'
             )}
           </button>
         </form>
