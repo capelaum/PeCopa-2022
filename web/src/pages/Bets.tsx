@@ -60,7 +60,10 @@ export function Bets() {
       <Header>
         <section className="text-white w-full flex gap-4 items-center">
           {isValidUser && (
-            <div className="flex flex-col gap-2 items-start">
+            <div
+              className="max-w-full flex flex-col gap-2 items-start overflow-hidden
+            "
+            >
               <span className="font-bold">Compartilhe os palpites!</span>
               <button
                 onClick={() => {
@@ -68,10 +71,15 @@ export function Bets() {
                   toast.info('Link copiado!')
                 }}
                 title="Copiar link"
-                className="flex justify-start items-center bg-red-300 p-2 rounded-lg hover:bg-opacity-90 hover:cursor-pointer"
+                className="
+                  max-w-full overflow-hidden text-ellipsis
+                  flex items-center gap-2
+                  bg-red-300 p-2 rounded-lg
+                  hover:bg-opacity-90 hover:cursor-pointer
+                "
               >
-                {link}
-                <TbCopy size={20} className="ml-2" />
+                <TbCopy size={20} className="ml-2 min-w-[16px]" />
+                <span className="overflow-hidden text-ellipsis">{link}</span>
               </button>
             </div>
           )}
@@ -79,7 +87,7 @@ export function Bets() {
       </Header>
 
       <main className="max-w-[712px] w-full flex flex-col items-center gap-8 my-8 px-5 flex-1">
-        <h2 className="w-full text-red-500 font-bold text-xl sm:text-2xl">
+        <h2 className="w-full text-red-500 font-bold text-xl sm:text-2xl overflow-hidden text-ellipsis">
           {isValidUser ? `Palpites de ${user.username}` : ''}
         </h2>
 

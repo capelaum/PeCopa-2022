@@ -57,7 +57,7 @@ export function Header({ children }: HeaderProps) {
   return (
     <header className="bg-red-500 w-full px-5 pb-6 flex flex-col items-center">
       <div className="max-w-2xl w-full flex flex-col gap-10">
-        <section className="w-full flex justify-between items-end">
+        <section className="w-full flex flex-col-reverse gap-8 items-center sm:flex-row justify-between sm:items-end">
           <img
             src="/assets/logo/pecopa_red.svg"
             alt="NaTrave Logo"
