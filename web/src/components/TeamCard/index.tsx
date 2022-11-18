@@ -1,4 +1,4 @@
-import { Team } from '@/@types/game'
+import { Team } from '@/libs/gamesLib/gameTypes'
 
 interface TeamCardProps {
   team: Team
