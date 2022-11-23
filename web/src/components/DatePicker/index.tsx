@@ -17,8 +17,8 @@ export function DatePicker({
   firstGameDate,
   lastGameDate,
 }: DatePickerProps) {
-  const isPrevButtonDisabled =
-    selectedDate < new Date() || selectedDate <= firstGameDate
+  const isPrevButtonDisabled = selectedDate <= firstGameDate
+
   const isNextButtonDisabled = selectedDate >= lastGameDate
 
   return (
